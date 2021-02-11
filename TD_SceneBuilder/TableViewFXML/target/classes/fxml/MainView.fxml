@@ -20,7 +20,7 @@
         <HBox layoutX="179.0" layoutY="639.0" prefHeight="125.0" prefWidth="673.0" spacing="5.0">
             <children>
                 <Label text="ID : " />
-                <TextField fx:id="matricule" promptText="Matricule" />
+                <TextField fx:id="matricule" onMouseClicked="#clearMat" promptText="Matricule" />
                 <Label text="Prénom :" />
                 <TextField fx:id="firstName" promptText="Prénom" />
                 <Label text="Nom :" />

@@ -1,9 +1,9 @@
 package view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MainViewController implements Initializable {
+
+    private ObservableList<Etudiant> listTable;
 
     @FXML
     private TableView tableView;
@@ -36,31 +38,36 @@ public class MainViewController implements Initializable {
     private TextField LastName;
 
     @FXML
-    void addEtudiant(ActionEvent event) {
-        int nr = Integer.parseInt(matricule.getText());
-        String pnm = firstName.getText();
-        String lstName = LastName.getText();
-        tableView.getItems().add(new Etudiant(nr, pnm, lstName));
+    private void clearMat() {
         matricule.clear();
-        firstName.clear();
-        LastName.clear();
+        matricule.setStyle("-fx-text-fill: black;");
+    }
+
+    @FXML
+    void addEtudiant(ActionEvent event) {
+        try {
+            int nr = Integer.parseInt(matricule.getText());
+            String pnm = firstName.getText();
+            String lstName = LastName.getText();
+            listTable.add(new Etudiant(nr, pnm, lstName));
+            matricule.clear();
+            firstName.clear();
+            LastName.clear();
+        } catch (NumberFormatException e) {
+            matricule.setText("Ce n'est pas un nombre!");
+            matricule.setStyle("-fx-text-fill: red;");
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        listTable = FXCollections.observableArrayList();
+        listTable.add(new Etudiant(53735, "Bryan", "Grégoire"));
+        
         num.setCellValueFactory(new PropertyValueFactory<>("num"));
         prenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
 
-        tableView.setItems(fullTableView());
-    }
-
-    public ObservableList<Etudiant> fullTableView() {
-        ObservableList<Etudiant> etudiants = FXCollections.observableArrayList();
-        etudiants.add(new Etudiant(1, "Arthur", "Paquot"));
-        etudiants.add(new Etudiant(53735, "Bryan", "Grégoire"));
-        etudiants.add(new Etudiant(54637, "Billal", "Zidi"));
-        return etudiants;
+        tableView.setItems(listTable);
     }
 }
