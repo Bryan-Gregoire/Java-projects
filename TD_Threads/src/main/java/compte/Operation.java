@@ -18,15 +18,17 @@ public class Operation extends Thread {
 
     @Override
     public void run() {
-        while (!interrupted()) {
+        int i = 0;
+        while (i < 10_000) {
             int rand = rnd.nextInt(20);
-            synchronized (this) {
+            synchronized (cpt) {
                 cpt.deposerArgent(rand);
                 cpt.retirerArgent(rand);
             }
-            synchronized (this) {
+            synchronized (cpt) {
                 System.out.println("Solde compte : " + cpt.getSomme());
             }
+            i++;
         }
     }
 }
