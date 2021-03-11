@@ -1,7 +1,5 @@
 package model;
 
-import java.util.stream.IntStream;
-
 /**
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
@@ -9,16 +7,30 @@ import java.util.stream.IntStream;
 public class BubbleSort implements Sort {
 
     @Override
-    public void sort(int[] arr) {
-        int n = arr.length;
-        IntStream.range(0, n - 1)
-                .flatMap(i -> IntStream.range(1, n - i))
-                .forEach(j -> {
-                    if (arr[j - 1] > arr[j]) {
-                        int temp = arr[j];
-                        arr[j] = arr[j - 1];
-                        arr[j - 1] = temp;
-                    }
-                });
+    public int sort(int[] arr) {
+        int count = 0;
+        int i = 0, n = arr.length;
+        boolean swapNeeded = true;
+        count = count + 3;
+
+        while (i < n - 1 && swapNeeded) {
+            swapNeeded = false;
+            count++;
+            for (int j = 1; j < n - i; j++) {
+                if (arr[j - 1] > arr[j]) {
+                    int temp = arr[j - 1];
+                    arr[j - 1] = arr[j];
+                    arr[j] = temp;
+                    swapNeeded = true;
+                    count = count + 4;
+                }
+            }
+            if (!swapNeeded) {
+                break;
+            }
+            i++;
+            count++;
+        }
+        return count;
     }
 }
