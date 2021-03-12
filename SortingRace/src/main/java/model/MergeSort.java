@@ -6,6 +6,13 @@ package model;
  */
 public class MergeSort implements Sort {
 
+    /**
+     * Source : https://www.baeldung.com/java-merge-sort.
+     *
+     * @param a the given array to sort.
+     *
+     * @return The number of operations.
+     */
     @Override
     public int sort(int[] a) {
         int count = 0;
@@ -36,8 +43,7 @@ public class MergeSort implements Sort {
         return count;
     }
 
-    private int merge(
-            int[] a, int[] l, int[] r, int left, int right) {
+    private int merge(int[] a, int[] l, int[] r, int left, int right) {
         int count = 0;
         int i = 0, j = 0, k = 0;
         count = count + 4;

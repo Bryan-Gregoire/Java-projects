@@ -6,6 +6,13 @@ package model;
  */
 public class BubbleSort implements Sort {
 
+    /**
+     * Source : https://www.baeldung.com/java-bubble-sort
+     * 
+     * @param arr the given array to sort.
+     * 
+     * @return the number of operation.
+     */
     @Override
     public int sort(int[] arr) {
         int count = 0;
