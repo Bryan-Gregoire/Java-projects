@@ -27,8 +27,12 @@ public class Controller {
         this.view = ViewFX;
     }
     
-       /**
-     * Add the given listener to the model.
+    public void sortNbArrays(int nb, int size) {
+        model.sortArrays(nb, size);
+    }
+
+    /**
+     * Add the given listener to the PropertyChangeSupport.
      *
      * @param listener the given listener.
      */
@@ -37,7 +41,7 @@ public class Controller {
     }
 
     /**
-     * Remove the given listener of the model.
+     * Remove the given listener of the PropertyChangeSupport.
      *
      * @param listener the given listener.
      */

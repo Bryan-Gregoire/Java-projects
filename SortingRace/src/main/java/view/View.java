@@ -22,8 +22,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCombination;
+import model.MyThreads;
 
-public class View implements Initializable, InterfaceView{
+public class View implements Initializable, InterfaceView {
 
     @FXML
     private MenuItem quitItem;
@@ -53,7 +54,7 @@ public class View implements Initializable, InterfaceView{
     private Spinner threadSpinner;
 
     @FXML
-    private ChoiceBox configurationChoice;
+    private ChoiceBox<String> configurationChoice;
 
     @FXML
     private ProgressBar progressBar;
@@ -67,12 +68,16 @@ public class View implements Initializable, InterfaceView{
     @FXML
     private Label rightStatus;
 
-    Controller controller;
+    private Controller controller;
+    private final String veryEasy = "Very Easy : 0 - 100 - 10";
+    private final String easy = "Easy : 0 - 1 000 - 100";
+    private final String moderate = "Moderate : 0 - 10 000 - 1000";
+    private final String hard = "Hard : 0 - 100 000 - 10 000";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Start
-        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.now();
 
         // Item quit
         quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
@@ -109,13 +114,22 @@ public class View implements Initializable, InterfaceView{
         // End Thread Spinner
 
         // ChoiceBox of the level of difficulty
-        String veryEasy = "Very Easy : 0 - 100 - 10";
         configurationChoice.setValue(veryEasy);
         configurationChoice.getItems().add(veryEasy);
-        configurationChoice.getItems().add("Easy : 0 - 1 000 - 100");
-        configurationChoice.getItems().add("Moderate : 0 - 10 000 - 1000");
-        configurationChoice.getItems().add("Hard : 0 - 100 000 - 10 000");
+        configurationChoice.getItems().add(easy);
+        configurationChoice.getItems().add(moderate);
+        configurationChoice.getItems().add(hard);
         // End ChoiceBox of the level of difficulty
+
+        // Start Button
+        this.start.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                int value = (int) threadSpinner.getValue();
+                int size = sizeChoice();
+                controller.sortNbArrays(value, size);
+            }
+        });
 
         // Label number of active threads
         leftStatus.setText("Threads actifs : " + Thread.activeCount());
@@ -123,11 +137,11 @@ public class View implements Initializable, InterfaceView{
 
         // Label start time, end time and duration in milliseconds
         LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
+        Duration duration = Duration.between(startTime, end);
         DateTimeFormatter formatter
                 = DateTimeFormatter.ofPattern(("HH:mm:ss:SSS"));
         rightStatus.setText("Derniere exécution | Début : "
-                + start.format(formatter) + " - " + "Fin : "
+                + startTime.format(formatter) + " - " + "Fin : "
                 + end.format(formatter) + " Durée | Duration : "
                 + duration.toMillis() + " ms ");
         // End Label start time, end time and duration in milliseconds
@@ -138,7 +152,34 @@ public class View implements Initializable, InterfaceView{
         this.controller = controller;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // TODO
+        if (evt.equals(MyThreads.ARRAY_SORT)) {
+            nameCol.getColumns().add("Tri Fusion");
+            int[] evtValue = (int[]) evt.getNewValue();
+            sizeCol.getColumns().add(evtValue.length);
+        }
+
+        if (evt.equals(MyThreads.OPERATIONS)) {
+            swapCol.getColumns().add(evt.getNewValue());
+        }
+
+        if (evt.equals(MyThreads.MILLI_SECOND)) {
+            durationCol.getColumns().add(evt.getNewValue());
+        }
+    }
+
+    private int sizeChoice() {
+        switch (configurationChoice.getValue()) {
+            case veryEasy:
+                return 100;
+            case easy:
+                return 1_000;
+            case moderate:
+                return 10_000;
+            case hard:
+                return 100_000;
+        }
+        return 100;
     }
 }

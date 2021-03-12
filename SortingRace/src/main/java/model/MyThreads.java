@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  *
@@ -12,21 +13,43 @@ import java.time.LocalDateTime;
 public class MyThreads extends Thread {
 
     private final PropertyChangeSupport pcs;
+
     private int[] array;
+
     private long durationMilli;
+
+    private int nbOperations;
+
+    private final MergeSort merge;
+    private final BubbleSort bubble;
+
+    public static String ARRAY_SORT;
+    public static String MILLI_SECOND;
+    public static String OPERATIONS;
 
     public MyThreads(int[] arrayToSort) {
         this.pcs = new PropertyChangeSupport(this);
         array = arrayToSort;
+        merge = new MergeSort();
+        bubble = new BubbleSort();
     }
 
     @Override
     public void run() {
         LocalDateTime start = LocalDateTime.now();
 
+        System.out.print("Mon tableau avant de trier : ");
+        Arrays.toString(array);
+        nbOperations = merge.sort(array);
+        System.out.print("Mon tableau après avoir été trier : ");
+        Arrays.toString(array);
+        pcs.firePropertyChange(ARRAY_SORT, null, array);
+        pcs.firePropertyChange(OPERATIONS, 0, nbOperations);
+
         LocalDateTime end = LocalDateTime.now();
         Duration duration = Duration.between(start, end);
         durationMilli = duration.toMillis();
+        pcs.firePropertyChange(MILLI_SECOND, 0, durationMilli);
     }
 
     public long getDurationMilli() {
