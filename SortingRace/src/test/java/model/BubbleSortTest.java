@@ -1,5 +1,6 @@
 package model;
 
+import esi.atl.model.BubbleSort;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 

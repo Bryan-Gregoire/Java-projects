@@ -1,6 +1,6 @@
-package view;
+package esi.atl.view;
 
-import controller.Controller;
+import esi.atl.controller.Controller;
 import java.beans.PropertyChangeListener;
 
 /**

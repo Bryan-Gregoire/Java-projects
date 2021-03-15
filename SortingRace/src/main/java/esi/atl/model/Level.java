@@ -1,4 +1,4 @@
-package view;
+package esi.atl.model;
 
 /**
  *

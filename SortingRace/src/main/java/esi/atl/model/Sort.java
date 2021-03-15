@@ -1,4 +1,4 @@
-package model;
+package esi.atl.model;
 
 /**
  *

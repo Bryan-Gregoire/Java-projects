@@ -1,6 +1,7 @@
-package view;
+package esi.atl.view;
 
-import controller.Controller;
+import esi.atl.model.Level;
+import esi.atl.controller.Controller;
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.time.Duration;
@@ -22,7 +23,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCombination;
-import model.MyThreads;
+import esi.atl.model.MyThreads;
+import esi.atl.model.SortType;
 
 public class View implements Initializable, InterfaceView {
 
@@ -95,17 +97,15 @@ public class View implements Initializable, InterfaceView {
 
         // End LineChart
         // ChoiceBox types of sorting
-        String bubble = "Tri à bulles";
-        sortChoice.setValue(bubble);
-        sortChoice.getItems().add(bubble);
-        sortChoice.getItems().add("Tri Fusion");
+        sortChoice.setValue(SortType.BUBBLE);
+        sortChoice.getItems().addAll(SortType.values());
         // End ChoiceBox types of sorting
 
         // Thread Spinner
-        final int defaultValue = 1;
+        final int spinnerDefaultValue = 1;
         SpinnerValueFactory<Integer> valueFactory
                 = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10,
-                        defaultValue);
+                        spinnerDefaultValue);
         threadSpinner.setValueFactory(valueFactory);
         // End Thread Spinner
 
@@ -121,7 +121,9 @@ public class View implements Initializable, InterfaceView {
             public void handle(ActionEvent t) {
                 int value = (int) threadSpinner.getValue();
                 int size = configurationChoice.getValue().getLevel();
-                controller.sortNbArrays(value, size);
+                SortType sort = (SortType) sortChoice.getValue();
+
+                controller.sortNbArrays(value, size, sort);
             }
         });
         // End Start button
@@ -149,17 +151,17 @@ public class View implements Initializable, InterfaceView {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.equals(MyThreads.ARRAY_SORT)) {
-            nameCol.getColumns().add("Tri Fusion");
+        if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
+            nameCol.getColumns().add(sortChoice.getValue());
             int[] evtValue = (int[]) evt.getNewValue();
             sizeCol.getColumns().add(evtValue.length);
         }
 
-        if (evt.equals(MyThreads.OPERATIONS)) {
+        if (evt.getPropertyName().equals(MyThreads.OPERATIONS)) {
             swapCol.getColumns().add(evt.getNewValue());
         }
 
-        if (evt.equals(MyThreads.MILLI_SECOND)) {
+        if (evt.getPropertyName().equals(MyThreads.MILLI_SECOND)) {
             durationCol.getColumns().add(evt.getNewValue());
         }
     }

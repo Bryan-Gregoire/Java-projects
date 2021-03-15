@@ -1,5 +1,6 @@
 package model;
 
+import esi.atl.model.MergeSort;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,16 +1,14 @@
-package main;
+package esi.atl.main;
 
-import controller.Controller;
+import esi.atl.controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Model;
-import view.InterfaceView;
-import view.View;
+import esi.atl.model.Facade;
+import esi.atl.model.Model;
+import esi.atl.view.InterfaceView;
 
 /**
  *
@@ -29,7 +27,7 @@ public class MainApp extends Application {
         Parent root = loader.load();
         
         InterfaceView view = loader.getController();
-        Model model = new Model();
+        Model model = new Facade();
 
         Controller controller = new Controller(model, view);
         view.setController(controller);

@@ -1,4 +1,4 @@
-package model;
+package esi.atl.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -15,43 +15,47 @@ public class MyThreads extends Thread {
     private final PropertyChangeSupport pcs;
 
     private int[] array;
-
     private long durationMilli;
-
     private long nbOperations;
 
-    private final MergeSort merge;
-    private final BubbleSort bubble;
+    public static String ARRAY_SORT = "sort array";
+    public static String MILLI_SECOND = "Milli_seconds";
+    public static String OPERATIONS = "Operations";
 
-    public static String ARRAY_SORT;
-    public static String MILLI_SECOND;
-    public static String OPERATIONS;
+    private Sort sorter;
 
-    public MyThreads(int[] arrayToSort) {
+    public MyThreads(int[] arrayToSort, SortType typeSort) {
         this.pcs = new PropertyChangeSupport(this);
-        
         array = arrayToSort;
-        merge = new MergeSort();
-        bubble = new BubbleSort();
+        nbOperations = 0;
+        durationMilli = 0;
+
+        switch (typeSort) {
+            case BUBBLE:
+                this.sorter = new BubbleSort();
+            case TRI_FUSION:
+                this.sorter = new MergeSort();
+        }
     }
 
     @Override
     public void run() {
         LocalDateTime start = LocalDateTime.now();
 
-        int[] oldArray = this.array;
-        System.out.print("Mon tableau avant de trier : ");
+        int[] oldArray = Arrays.copyOf(array, array.length);
+        System.out.println("Mon tableau avant de trier : ");
         System.out.println(Arrays.toString(oldArray));
-        nbOperations = merge.sort(array);
-        System.out.print("Mon tableau après avoir été trier : ");
+        nbOperations += sorter.sort(array);
+        System.out.println("Mon tableau après avoir été trier : ");
         System.out.println(Arrays.toString(array));
-        
-        pcs.firePropertyChange(ARRAY_SORT, null, array);
+
+        pcs.firePropertyChange(ARRAY_SORT, oldArray, this.array);
         pcs.firePropertyChange(OPERATIONS, 0, nbOperations);
 
         LocalDateTime end = LocalDateTime.now();
         Duration duration = Duration.between(start, end);
         durationMilli = duration.toMillis();
+        pcs.firePropertyChange(MILLI_SECOND, 0, durationMilli);
         pcs.firePropertyChange(MILLI_SECOND, 0, durationMilli);
     }
 
