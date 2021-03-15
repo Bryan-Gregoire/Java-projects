@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Model;
 import view.InterfaceView;
@@ -22,14 +24,16 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass()
+        FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource("/fxml/sort.fxml"));
-        InterfaceView view = new View();
+        Parent root = loader.load();
+        
+        InterfaceView view = loader.getController();
         Model model = new Model();
-        Controller controller = new Controller(model, view);
-        controller.addModelListener(view);
-        view.setController(controller);
 
+        Controller controller = new Controller(model, view);
+        view.setController(controller);
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

@@ -26,27 +26,8 @@ public class Controller {
         this.model = model;
         this.view = ViewFX;
     }
-    
-    public void sortNbArrays(int nb, int size) {
-        model.sortArrays(nb, size);
-    }
 
-    /**
-     * Add the given listener to the PropertyChangeSupport.
-     *
-     * @param listener the given listener.
-     */
-    public void addModelListener(PropertyChangeListener listener) {
-        model.addPropertyChangeListenerToAll(listener);
+    public void sortNbArrays(int nbThreads, int sizeArray) {
+        model.sortArrays(nbThreads, sizeArray, this.view);
     }
-
-    /**
-     * Remove the given listener of the PropertyChangeSupport.
-     *
-     * @param listener the given listener.
-     */
-    public void removeModelListener(PropertyChangeListener listener) {
-        model.removePropertyChangeListenerToAll(listener);
-    }
-
 }

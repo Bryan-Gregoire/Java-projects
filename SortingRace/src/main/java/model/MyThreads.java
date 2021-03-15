@@ -18,7 +18,7 @@ public class MyThreads extends Thread {
 
     private long durationMilli;
 
-    private int nbOperations;
+    private long nbOperations;
 
     private final MergeSort merge;
     private final BubbleSort bubble;
@@ -29,6 +29,7 @@ public class MyThreads extends Thread {
 
     public MyThreads(int[] arrayToSort) {
         this.pcs = new PropertyChangeSupport(this);
+        
         array = arrayToSort;
         merge = new MergeSort();
         bubble = new BubbleSort();
@@ -38,11 +39,13 @@ public class MyThreads extends Thread {
     public void run() {
         LocalDateTime start = LocalDateTime.now();
 
+        int[] oldArray = this.array;
         System.out.print("Mon tableau avant de trier : ");
-        Arrays.toString(array);
+        System.out.println(Arrays.toString(oldArray));
         nbOperations = merge.sort(array);
         System.out.print("Mon tableau après avoir été trier : ");
-        Arrays.toString(array);
+        System.out.println(Arrays.toString(array));
+        
         pcs.firePropertyChange(ARRAY_SORT, null, array);
         pcs.firePropertyChange(OPERATIONS, 0, nbOperations);
 

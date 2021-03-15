@@ -54,7 +54,7 @@ public class View implements Initializable, InterfaceView {
     private Spinner threadSpinner;
 
     @FXML
-    private ChoiceBox<String> configurationChoice;
+    private ChoiceBox<Level> configurationChoice;
 
     @FXML
     private ProgressBar progressBar;
@@ -69,10 +69,6 @@ public class View implements Initializable, InterfaceView {
     private Label rightStatus;
 
     private Controller controller;
-    private final String veryEasy = "Very Easy : 0 - 100 - 10";
-    private final String easy = "Easy : 0 - 1 000 - 100";
-    private final String moderate = "Moderate : 0 - 10 000 - 1000";
-    private final String hard = "Hard : 0 - 100 000 - 10 000";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -114,22 +110,21 @@ public class View implements Initializable, InterfaceView {
         // End Thread Spinner
 
         // ChoiceBox of the level of difficulty
-        configurationChoice.setValue(veryEasy);
-        configurationChoice.getItems().add(veryEasy);
-        configurationChoice.getItems().add(easy);
-        configurationChoice.getItems().add(moderate);
-        configurationChoice.getItems().add(hard);
+        configurationChoice.setValue(Level.VERY_EASY);
+        configurationChoice.getItems().addAll(Level.values());
         // End ChoiceBox of the level of difficulty
 
         // Start Button
         this.start.setOnAction(new EventHandler<ActionEvent>() {
+
             @Override
             public void handle(ActionEvent t) {
                 int value = (int) threadSpinner.getValue();
-                int size = sizeChoice();
+                int size = configurationChoice.getValue().getLevel();
                 controller.sortNbArrays(value, size);
             }
         });
+        // End Start button
 
         // Label number of active threads
         leftStatus.setText("Threads actifs : " + Thread.activeCount());
@@ -167,19 +162,5 @@ public class View implements Initializable, InterfaceView {
         if (evt.equals(MyThreads.MILLI_SECOND)) {
             durationCol.getColumns().add(evt.getNewValue());
         }
-    }
-
-    private int sizeChoice() {
-        switch (configurationChoice.getValue()) {
-            case veryEasy:
-                return 100;
-            case easy:
-                return 1_000;
-            case moderate:
-                return 10_000;
-            case hard:
-                return 100_000;
-        }
-        return 100;
     }
 }

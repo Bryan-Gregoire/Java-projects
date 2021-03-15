@@ -19,8 +19,9 @@ public class Model {
         rnd = new Random();
     }
 
-    public void sortArrays(int nb, int size) {
-        fillWithThread(nb, size);
+    public void sortArrays(int nb, int size, PropertyChangeListener listener) {
+        fillThreadWithArray(nb, size);
+        addPropertyChangeListenerToAll(listener);
         startThreads();
     }
 
@@ -30,17 +31,25 @@ public class Model {
         }
     }
 
-    private void fillWithThread(int nb, int size) {
-        for (int i = 0; i < nb; i++) {
-            int[] array = new int[size];
-            for (int j = 0; j < nb; j++) {
-                array[j] = rnd.nextInt(100);
+    private void fillThreadWithArray(int nbThread, int sizeArray) {
+        int[] array = new int[sizeArray];
+
+        for (int i = 0; i < sizeArray; i++) {
+            array[i] = rnd.nextInt(sizeArray);
+        }
+
+        int increment = sizeArray / 10;
+        int[] arrayToSort = new int[increment];
+        for (int i = 0; i < nbThread; i++) {
+            for (int j = 0; j < increment; j++) {
+                arrayToSort[j] = array[i];
             }
-            listThreads.add(new MyThreads(array));
+            listThreads.add(new MyThreads(arrayToSort));
+            increment += 10;
         }
     }
 
-    public void addPropertyChangeListenerToAll(
+    private void addPropertyChangeListenerToAll(
             PropertyChangeListener listener) {
 
         for (MyThreads thread : listThreads) {
