@@ -69,4 +69,8 @@ public class MergeSort implements Sort {
         return count;
     }
 
+    @Override
+    public String toString() {
+        return "Tri fusion";
+    }
 }

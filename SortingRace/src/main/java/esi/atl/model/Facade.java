@@ -35,20 +35,24 @@ public class Facade implements Model {
 
     private void fillThreadWithArray(int nbThread, int sizeArray,
             SortType sortType) {
+        listThreads.clear();
         int[] array = new int[sizeArray];
 
         for (int i = 0; i < sizeArray; i++) {
             array[i] = rnd.nextInt(sizeArray);
         }
 
-        int step = sizeArray / 10;
-        for (int i = 0; i < nbThread; i++) {
-            int[] arrayToSort = new int[step];
+        int step = array.length / 10;
+        int sizeArraySort = 0;
+        for (int i = 0; sizeArraySort <= sizeArray && i < nbThread; i++) {
+            int[] arrayToSort = new int[sizeArraySort];
             for (int j = 0; j < step; j++) {
-                arrayToSort[j] = array[j];
+                if (sizeArraySort != 0) {
+                    arrayToSort[j] = array[j];
+                }
             }
             listThreads.add(new MyThreads(arrayToSort, sortType));
-            step += step;
+            sizeArraySort += step;
         }
     }
 
@@ -56,7 +60,6 @@ public class Facade implements Model {
     public void addPropertyChangeListenerToAll(
             PropertyChangeListener listener) {
         for (MyThreads thread : listThreads) {
-            System.out.println("Mon thread : ");
             thread.addPropertyChangeListener(listener);
         }
     }

@@ -1,5 +1,6 @@
 package esi.atl.view;
 
+import esi.atl.model.ArrayData;
 import esi.atl.model.Level;
 import esi.atl.controller.Controller;
 import java.beans.PropertyChangeEvent;
@@ -25,6 +26,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCombination;
 import esi.atl.model.MyThreads;
 import esi.atl.model.SortType;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class View implements Initializable, InterfaceView {
 
@@ -35,16 +41,19 @@ public class View implements Initializable, InterfaceView {
     private MenuItem aboutItem;
 
     @FXML
-    private TableColumn nameCol;
+    private TableView<ArrayData> table;
 
     @FXML
-    private TableColumn sizeCol;
+    private TableColumn<ArrayData, String> nameCol;
 
     @FXML
-    private TableColumn swapCol;
+    private TableColumn<ArrayData, Integer> sizeCol;
 
     @FXML
-    private TableColumn durationCol;
+    private TableColumn<ArrayData, Long> swapCol;
+
+    @FXML
+    private TableColumn<ArrayData, Long> durationCol;
 
     @FXML
     private LineChart chart;
@@ -72,6 +81,11 @@ public class View implements Initializable, InterfaceView {
 
     private Controller controller;
 
+    XYChart.Series bubbleSortSerie;
+    XYChart.Series mergeSortSerie;
+
+    ObservableList<ArrayData> dataArray;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Start
@@ -87,15 +101,25 @@ public class View implements Initializable, InterfaceView {
         });
         // End Item quit
 
+        // TableView
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        sizeCol.setCellValueFactory(new PropertyValueFactory<>("size"));
+        swapCol.setCellValueFactory(
+                new PropertyValueFactory<>("nbOperationsSort"));
+        durationCol.setCellValueFactory(
+                new PropertyValueFactory<>("timeToSort"));
+        dataArray = FXCollections.observableArrayList();
+        table.setItems(dataArray);
+
+        // TableView end
         // LineChart 
-        XYChart.Series bubbleSortSerie = new XYChart.Series();
+        bubbleSortSerie = new XYChart.Series();
         bubbleSortSerie.setName("Tri à bulles");
-        XYChart.Series mergeSortSerie = new XYChart.Series();
+        mergeSortSerie = new XYChart.Series();
         mergeSortSerie.setName("Tri fusion");
         chart.getData().addAll(bubbleSortSerie, mergeSortSerie);
         // End LineChart
 
-        // End LineChart
         // ChoiceBox types of sorting
         sortChoice.setValue(SortType.BUBBLE);
         sortChoice.getItems().addAll(SortType.values());
@@ -151,18 +175,22 @@ public class View implements Initializable, InterfaceView {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
-            nameCol.getColumns().add(sortChoice.getValue());
-            int[] evtValue = (int[]) evt.getNewValue();
-            sizeCol.getColumns().add(evtValue.length);
-        }
-
-        if (evt.getPropertyName().equals(MyThreads.OPERATIONS)) {
-            swapCol.getColumns().add(evt.getNewValue());
-        }
-
-        if (evt.getPropertyName().equals(MyThreads.MILLI_SECOND)) {
-            durationCol.getColumns().add(evt.getNewValue());
+            Platform.runLater(() -> {
+                dataArray.add((ArrayData) evt.getNewValue());
+                if (sortChoice.getValue().equals(SortType.BUBBLE)) {
+                    bubbleSortSerie.getData().add(new XYChart.Data<>(
+                            ((ArrayData) evt.getNewValue()).getSize(),
+                            ((ArrayData) evt.getNewValue())
+                                    .getNbOperationsSort()));
+                } else {
+                    mergeSortSerie.getData().add(new XYChart.Data<>(
+                            ((ArrayData) evt.getNewValue()).getSize(),
+                            ((ArrayData) evt.getNewValue())
+                                    .getNbOperationsSort()));
+                }
+            });
         }
     }
 }

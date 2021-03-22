@@ -40,4 +40,9 @@ public class BubbleSort implements Sort {
         }
         return count;
     }
+
+    @Override
+    public String toString() {
+        return "Tri a bulle";
+    }
 }
