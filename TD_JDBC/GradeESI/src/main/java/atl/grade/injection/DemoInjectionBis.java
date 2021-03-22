@@ -26,7 +26,8 @@ public class DemoInjectionBis extends Demo {
     @Override
     public void execute(String url) {
         try {
-            Connection connexion = DriverManager.getConnection("jdbc:sqlite:" + url);
+            Connection connexion = DriverManager.getConnection("jdbc:sqlite:" 
+                    + url);
             Statement stmt = connexion.createStatement();
 
             String query = "SELECT id, lastname, firstname FROM STUDENTS WHERE id = "

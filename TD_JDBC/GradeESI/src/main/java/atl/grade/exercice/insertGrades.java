@@ -2,13 +2,13 @@ package atl.grade.exercice;
 
 import atl.grade.Demo;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import org.sqlite.SQLiteConfig;
 
 /**
@@ -30,16 +30,17 @@ public class insertGrades extends Demo {
                     + url, config.toProperties());
 
             Statement stmt = connexion.createStatement();
-            LocalDate date = LocalDate.parse("2021-06-18");
 
-            DateTimeFormatter formatter = DateTimeFormatter
-                    .ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime modified = LocalDateTime
-                    .parse("2021-06-20 17:54:33", formatter);
+            Date date
+                    = new Date(Calendar.getInstance().getTimeInMillis());
+
+            Timestamp modified
+                    = (new Timestamp(Calendar.getInstance().getTime()
+                            .getTime()));
 
             String query = "INSERT INTO GRADES(score,date,dateModified,"
                     + "id_student,id_lesson) VALUES(2, '" + date + "'"
-                    + ",’" + modified + "’, 1, ’SECL’)";
+                    + ",'" + modified + "', 1, 'SECL')";
 
             int count = stmt.executeUpdate(query);
             System.out.println("\t Nombre de record modifié : " + count);
