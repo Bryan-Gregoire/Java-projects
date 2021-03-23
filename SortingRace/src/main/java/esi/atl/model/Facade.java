@@ -42,17 +42,10 @@ public class Facade implements Model {
             array[i] = rnd.nextInt(sizeArray);
         }
 
-        int step = array.length / 10;
-        int sizeArraySort = 0;
-        for (int i = 0; sizeArraySort <= sizeArray && i < nbThread; i++) {
-            int[] arrayToSort = new int[sizeArraySort];
-            for (int j = 0; j < step; j++) {
-                if (sizeArraySort != 0) {
-                    arrayToSort[j] = array[j];
-                }
-            }
-            listThreads.add(new MyThreads(arrayToSort, sortType));
-            sizeArraySort += step;
+        JobManager manager = new JobManager(array);
+
+        for (int i = 0; i < nbThread; i++) {
+            listThreads.add(new MyThreads(sortType, manager));
         }
     }
 

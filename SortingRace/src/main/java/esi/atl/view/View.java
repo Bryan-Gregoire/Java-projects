@@ -177,20 +177,24 @@ public class View implements Initializable, InterfaceView {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
-            Platform.runLater(() -> {
+            Platform.runLater(() -> { // Laisser priorité au thread du modèle.
                 dataArray.add((ArrayData) evt.getNewValue());
-                if (sortChoice.getValue().equals(SortType.BUBBLE)) {
+            });
+            if (sortChoice.getValue().equals(SortType.BUBBLE)) {
+                Platform.runLater(() -> {
                     bubbleSortSerie.getData().add(new XYChart.Data<>(
                             ((ArrayData) evt.getNewValue()).getSize(),
                             ((ArrayData) evt.getNewValue())
                                     .getNbOperationsSort()));
-                } else {
+                });
+            } else {
+                Platform.runLater(() -> {
                     mergeSortSerie.getData().add(new XYChart.Data<>(
                             ((ArrayData) evt.getNewValue()).getSize(),
                             ((ArrayData) evt.getNewValue())
                                     .getNbOperationsSort()));
-                }
-            });
+                });
+            }
         }
     }
 }

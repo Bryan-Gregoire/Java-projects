@@ -13,18 +13,17 @@ public class MyThreads extends Thread {
 
     private final PropertyChangeSupport pcs;
 
-    private int[] array;
     private long durationMilli;
     private long nbOperations;
 
-    public static String ARRAY_SORT = "sort array";
+    public static String ARRAY_SORT = "array_sorted";
 
     private Sort sorter;
+    private JobManager manager;
 
-    public MyThreads(int[] arrayToSort, SortType typeSort) {
+    public MyThreads(SortType typeSort, JobManager manager) {
         this.pcs = new PropertyChangeSupport(this);
 
-        array = arrayToSort;
         nbOperations = 0;
         durationMilli = 0;
 
@@ -35,22 +34,27 @@ public class MyThreads extends Thread {
             case TRI_FUSION:
                 this.sorter = new MergeSort();
         }
+
+        this.manager = manager;
     }
 
     @Override
     public void run() {
         LocalDateTime start = LocalDateTime.now();
+        int[] array = manager.getNext();
 
-        nbOperations += sorter.sort(array);
+        while (array != null) {
+            nbOperations += sorter.sort(array);
+            LocalDateTime end = LocalDateTime.now();
+            Duration duration = Duration.between(start, end);
+            durationMilli = duration.toMillis();
 
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        durationMilli = duration.toMillis();
+            ArrayData data = new ArrayData(sorter.toString(), array.length,
+                    nbOperations, durationMilli);
 
-        ArrayData data = new ArrayData(sorter.toString(), array.length,
-                nbOperations, durationMilli);
-
-        pcs.firePropertyChange(ARRAY_SORT, null, data);
+            pcs.firePropertyChange(ARRAY_SORT, null, data);
+            array = manager.getNext();
+        }
 
     }
 
