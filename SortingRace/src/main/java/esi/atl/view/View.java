@@ -143,6 +143,7 @@ public class View implements Initializable, InterfaceView {
 
             @Override
             public void handle(ActionEvent t) {
+                //disableBottomElements(true);
                 int value = (int) threadSpinner.getValue();
                 int size = configurationChoice.getValue().getLevel();
                 SortType sort = (SortType) sortChoice.getValue();
@@ -196,5 +197,12 @@ public class View implements Initializable, InterfaceView {
                 });
             }
         }
+    }
+
+    private void disableBottomElements(boolean disable) {
+        start.setDisable(disable);
+        sortChoice.setDisable(disable);
+        threadSpinner.setDisable(disable);
+        configurationChoice.setDisable(disable);
     }
 }

@@ -40,14 +40,14 @@ public class MyThreads extends Thread {
 
     @Override
     public void run() {
-        LocalDateTime start = LocalDateTime.now();
         int[] array = manager.getNext();
-
         while (array != null) {
-            nbOperations += sorter.sort(array);
+            LocalDateTime start = LocalDateTime.now();
+
+            nbOperations = sorter.sort(array);
+
             LocalDateTime end = LocalDateTime.now();
-            Duration duration = Duration.between(start, end);
-            durationMilli = duration.toMillis();
+            durationMilli = Duration.between(start, end).toMillis();
 
             ArrayData data = new ArrayData(sorter.toString(), array.length,
                     nbOperations, durationMilli);

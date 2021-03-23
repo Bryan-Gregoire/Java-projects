@@ -6,7 +6,7 @@ package esi.atl.model;
  */
 public class JobManager {
 
-    private int[] arraySort;
+    private final int[] arraySort;
     private int step;
 
     public JobManager(int[] arraySort) {
@@ -20,9 +20,7 @@ public class JobManager {
         }
         int[] arrayThread = new int[step];
         for (int i = 0; i < arrayThread.length; i++) {
-            // if (arrayThread.length != 0) {
             arrayThread[i] = arraySort[i];
-            // }
         }
         step = step + (arraySort.length / 10);
         return arrayThread;

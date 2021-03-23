@@ -20,9 +20,9 @@ public class Facade implements Model {
     }
 
     @Override
-    public void sortArrays(int nb, int size, SortType sort,
+    public void sortArrays(int nbThread, int size, SortType sort,
             PropertyChangeListener listener) {
-        fillThreadWithArray(nb, size, sort);
+        fillThreadWithArray(nbThread, size, sort);
         addPropertyChangeListenerToAll(listener);
         startThreads();
     }
