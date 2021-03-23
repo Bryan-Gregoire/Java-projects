@@ -85,6 +85,7 @@ public class View implements Initializable, InterfaceView {
     XYChart.Series mergeSortSerie;
 
     ObservableList<ArrayData> dataArray;
+    private double progress = 0.0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,12 +144,14 @@ public class View implements Initializable, InterfaceView {
 
             @Override
             public void handle(ActionEvent t) {
-                //disableBottomElements(true);
+                progressBar.setProgress(progress);
+                disableBottomElements(true);
                 int value = (int) threadSpinner.getValue();
                 int size = configurationChoice.getValue().getLevel();
                 SortType sort = (SortType) sortChoice.getValue();
 
                 controller.sortNbArrays(value, size, sort);
+                progress = 0;
             }
         });
         // End Start button
@@ -178,24 +181,31 @@ public class View implements Initializable, InterfaceView {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
-            Platform.runLater(() -> { // Laisser priorité au thread du modèle.
-                dataArray.add((ArrayData) evt.getNewValue());
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    // Laisser priorité au thread du modèle.
+                    dataArray.add((ArrayData) evt.getNewValue());
+                    if (sortChoice.getValue().equals(SortType.BUBBLE)) {
+                        bubbleSortSerie.getData().add(new XYChart.Data<>(
+                                ((ArrayData) evt.getNewValue()).getSize(),
+                                ((ArrayData) evt.getNewValue())
+                                        .getNbOperationsSort()));
+                    } else {
+                        mergeSortSerie.getData().add(new XYChart.Data<>(
+                                ((ArrayData) evt.getNewValue()).getSize(),
+                                ((ArrayData) evt.getNewValue())
+                                        .getNbOperationsSort()));
+                    }
+
+                    progress = progress + 0.09090909091;
+                    progressBar.setProgress(progress);
+                    if (progress >= 1) {
+                        disableBottomElements(false);
+                    }
+                }
             });
-            if (sortChoice.getValue().equals(SortType.BUBBLE)) {
-                Platform.runLater(() -> {
-                    bubbleSortSerie.getData().add(new XYChart.Data<>(
-                            ((ArrayData) evt.getNewValue()).getSize(),
-                            ((ArrayData) evt.getNewValue())
-                                    .getNbOperationsSort()));
-                });
-            } else {
-                Platform.runLater(() -> {
-                    mergeSortSerie.getData().add(new XYChart.Data<>(
-                            ((ArrayData) evt.getNewValue()).getSize(),
-                            ((ArrayData) evt.getNewValue())
-                                    .getNbOperationsSort()));
-                });
-            }
+
         }
     }
 
