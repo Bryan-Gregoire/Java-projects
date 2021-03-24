@@ -1,5 +1,6 @@
 package atl.grade.jdbc;
 
+import atl.grade.dto.GradeDto;
 import atl.grade.dto.StudentDto;
 import atl.grade.exception.RepositoryException;
 import atl.grade.repository.Dao;
@@ -119,6 +120,29 @@ public class StudentsDao implements Dao<Integer, StudentDto> {
             throw new RepositoryException(e);
         }
         return dto;
+    }
+
+    public StudentDto getFullStudent(Integer key) throws RepositoryException {
+        if (key == null) {
+            throw new RepositoryException("Aucune clé donnée en paramètre ");
+        }
+        StudentDto student = select(key);
+        //String sql = "SELECT G.id_lesson,G.score FROM GRADES G JOIN STUDENTS S ON G.id_student =" + key;
+        String sql = "SELECT id_lesson,score FROM GRADES where id_student = " + key;
+
+        try (Statement stmt = connexion.createStatement();
+                ResultSet result = stmt.executeQuery(sql)) {
+            while (result.next()) {
+                String lesson = result.getString(1);
+                int value = result.getInt(2);
+                System.out.println("La lecon : " + lesson + " Le score : " + value);
+                student.getGrades().add(new GradeDto(key, value, lesson));
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+
+        return student;
     }
 
     private static class StudentsDaoHolder {

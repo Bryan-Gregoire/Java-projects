@@ -13,6 +13,12 @@ public class GradeDto extends Dto<Integer> {
         super(key);
     }
 
+    public GradeDto(Integer key, int value, String lesson) {
+        super(key);
+        this.value = value;
+        this.lesson = lesson;
+    }
+
     public int getValue() {
         return value;
     }

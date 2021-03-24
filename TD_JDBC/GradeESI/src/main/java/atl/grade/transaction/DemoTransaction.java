@@ -37,7 +37,8 @@ public class DemoTransaction extends Demo {
             try {
                 connexion.rollback();
             } catch (SQLException ex1) {
-                System.out.println("DEMO_TRANSACTION | Erreur du rollback " + ex1.getMessage() + " SQLState " + ex1.getSQLState());
+                System.out.println("DEMO_TRANSACTION | Erreur du rollback "
+                        + ex1.getMessage() + " SQLState " + ex1.getSQLState());
             }
         }
     }

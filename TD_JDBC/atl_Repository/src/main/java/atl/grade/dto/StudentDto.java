@@ -1,5 +1,6 @@
 package atl.grade.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,10 +17,11 @@ public class StudentDto extends Dto<Integer> {
         super(key);
     }
 
-    public StudentDto(Integer key,String firstName, String lastName) {
+    public StudentDto(Integer key, String firstName, String lastName) {
         super(key);
         this.firstName = firstName;
         this.lastName = lastName;
+        grades = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -32,6 +34,10 @@ public class StudentDto extends Dto<Integer> {
 
     public List<GradeDto> getGrades() {
         return grades;
+    }
+
+    public void setGrades(List<GradeDto> grades) {
+        this.grades = grades;
     }
 
 }

@@ -1,8 +1,9 @@
 package atl.grade;
 
 import atl.grade.config.ConfigManager;
-import atl.grade.exercice.insertGrades;
+import atl.grade.prepare.DemoPrepare;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  *
@@ -21,7 +22,15 @@ public class DemoJDBC {
             String dbUrl = ConfigManager.getInstance().getProperties("db.url");
             System.out.println("Base de données stockée : " + dbUrl);
 
-            Demo demo = new insertGrades();
+            Scanner input = new Scanner(System.in);
+            System.out.println("Id : ");
+            int id = input.nextInt();
+            input.nextLine();
+            System.out.println("Lastname : ");
+            String lastname = input.nextLine();
+
+            Demo demo = new DemoPrepare(dbUrl, id, lastname);
+
             demo.printTitle();
             demo.execute(dbUrl);
         } catch (IOException ex) {
@@ -29,5 +38,6 @@ public class DemoJDBC {
         }
     }
 
-    private DemoJDBC() { }
+    private DemoJDBC() {
+    }
 }

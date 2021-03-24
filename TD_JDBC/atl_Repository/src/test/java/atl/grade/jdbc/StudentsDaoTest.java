@@ -1,6 +1,7 @@
 package atl.grade.jdbc;
 
 import atl.grade.config.ConfigManager;
+import atl.grade.dto.GradeDto;
 import atl.grade.dto.StudentDto;
 import atl.grade.exception.RepositoryException;
 import java.io.IOException;
@@ -76,6 +77,65 @@ public class StudentsDaoTest {
         assertThrows(RepositoryException.class, () -> {
             //Action
             instance.select(incorrect);
+        });
+    }
+
+    @Test
+    public void testGetFullStudent() throws Exception {
+        System.out.println("Test GetFullStudent exist");
+        //Arrange
+        StudentDto excepted = all.get(0);
+
+        List<GradeDto> exceptedGrades = new ArrayList<GradeDto>();
+        exceptedGrades.add(new GradeDto(1, 14, "ATL"));
+        exceptedGrades.add(new GradeDto(1, 16, "ATL"));
+        exceptedGrades.add(new GradeDto(1, 10, "ATL"));
+
+        //Action
+        StudentDto result = instance.getFullStudent(1);
+        List<GradeDto> resultGrades = result.getGrades();
+        //Assert
+        assertEquals(excepted, result);
+        assertEquals(exceptedGrades, resultGrades);
+    }
+
+    @Test
+    public void testGetFullStudent2() throws Exception {
+        System.out.println("Test GetFullStudent exist");
+        //Arrange
+        StudentDto excepted = all.get(1);
+
+        List<GradeDto> exceptedGrades = new ArrayList<GradeDto>();
+        exceptedGrades.add(new GradeDto(2, 14, "ATL"));
+        exceptedGrades.add(new GradeDto(2, 14, "ATL"));
+
+        //Action
+        StudentDto result = instance.getFullStudent(2);
+        List<GradeDto> resultGrades = result.getGrades();
+        //Assert
+        assertEquals(excepted, result);
+        assertEquals(exceptedGrades, resultGrades);
+    }
+
+    @Test
+    public void testGetFullStudentNotExist() throws Exception {
+        System.out.println("Test GetFullStudent not exist");
+        //Arrange
+        //Action
+        StudentDto result = instance.getFullStudent(patrick.getKey());
+        //Assert
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetFullStudentIncorrectParameter() throws Exception {
+        System.out.println("testGetFullStudentIncorrectParameter");
+        //Arrange
+        Integer incorrect = null;
+        //Assert
+        assertThrows(RepositoryException.class, () -> {
+            //Action
+            instance.getFullStudent(incorrect);
         });
     }
 
