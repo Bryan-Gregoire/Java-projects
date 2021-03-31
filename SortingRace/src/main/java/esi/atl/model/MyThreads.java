@@ -17,6 +17,7 @@ public class MyThreads extends Thread {
     private long nbOperations;
 
     public static String ARRAY_SORT = "array_sorted";
+    public static String ACTIVE = "active thread";
 
     private Sort sorter;
     private JobManager manager;
@@ -40,6 +41,7 @@ public class MyThreads extends Thread {
 
     @Override
     public void run() {
+        pcs.firePropertyChange(ACTIVE, 0, 1);
         int[] array = manager.getNext();
         while (array != null) {
             LocalDateTime start = LocalDateTime.now();

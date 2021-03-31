@@ -149,6 +149,11 @@ public class View implements Initializable, InterfaceView {
                 int value = (int) threadSpinner.getValue();
                 int size = configurationChoice.getValue().getLevel();
                 SortType sort = (SortType) sortChoice.getValue();
+                if (sort == SortType.BUBBLE) {
+                    bubbleSortSerie.getData().clear();
+                } else {
+                    mergeSortSerie.getData().clear();
+                }
 
                 controller.sortNbArrays(value, size, sort);
                 progress = 0;
@@ -179,6 +184,15 @@ public class View implements Initializable, InterfaceView {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(MyThreads.ACTIVE)) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    leftStatus.setText("Threads actifs : " 
+                            + Thread.activeCount());
+                }
+            });
+        }
 
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
             Platform.runLater(new Runnable() {
