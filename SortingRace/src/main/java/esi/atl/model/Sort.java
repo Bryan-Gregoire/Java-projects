@@ -12,6 +12,6 @@ public interface Sort {
      * 
      * @return the number of operations performed.
      */
-    public int sort(int[] arr);
+    public long sort(int[] arr);
     
 }

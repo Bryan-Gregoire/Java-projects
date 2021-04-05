@@ -14,8 +14,8 @@ public class MergeSort implements Sort {
      * @return The number of operations.
      */
     @Override
-    public int sort(int[] a) {
-        int count = 0;
+    public long sort(int[] a) {
+        long count = 0;
         int n = a.length;
         count++;
         if (n < 2) {

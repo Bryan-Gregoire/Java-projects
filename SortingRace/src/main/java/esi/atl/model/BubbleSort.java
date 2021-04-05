@@ -14,8 +14,8 @@ public class BubbleSort implements Sort {
      * @return the number of operation.
      */
     @Override
-    public int sort(int[] arr) {
-        int count = 0;
+    public long sort(int[] arr) {
+        long count = 0;
         int i = 0, n = arr.length;
         boolean swapNeeded = true;
         count = count + 3;
