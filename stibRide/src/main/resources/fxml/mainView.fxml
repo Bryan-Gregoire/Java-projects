@@ -12,10 +12,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esi.atl.view.View">
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="843.0" prefWidth="1330.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esi.atl.view.View">
    <children>
       <MenuBar>
         <menus>
@@ -36,33 +36,45 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ScrollPane prefHeight="326.0" prefWidth="1004.0">
+      <ScrollPane prefHeight="437.0" prefWidth="1328.0">
          <content>
-            <ImageView fitHeight="373.0" fitWidth="1754.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="610.0" fitWidth="2133.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/metro.gif" />
                </image>
             </ImageView>
          </content>
       </ScrollPane>
-      <AnchorPane prefHeight="389.0" prefWidth="986.0">
+      <AnchorPane prefHeight="414.0" prefWidth="1446.0">
          <children>
-            <ImageView fitHeight="118.0" fitWidth="82.0" layoutX="174.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="118.0" fitWidth="82.0" layoutX="343.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/logo.png" />
                </image>
             </ImageView>
-            <SearchableComboBox layoutX="132.0" layoutY="195.0" />
-            <Label layoutX="188.0" layoutY="161.0" prefHeight="25.0" prefWidth="53.0" text="Origine : " underline="true" />
-            <SearchableComboBox layoutX="132.0" layoutY="272.0" />
-            <Label layoutX="184.0" layoutY="240.0" text="Destination : " underline="true" />
-            <Button layoutX="182.0" layoutY="324.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
-            <TableView layoutX="417.0" layoutY="18.0" prefHeight="326.0" prefWidth="534.0">
+            <SearchableComboBox layoutX="297.0" layoutY="209.0" />
+            <Label layoutX="350.0" layoutY="174.0" prefHeight="25.0" prefWidth="90.0" text="Origine : " underline="true">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <SearchableComboBox layoutX="297.0" layoutY="293.0" />
+            <Label layoutX="349.0" layoutY="255.0" text="Destination : " underline="true">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Button layoutX="347.0" layoutY="337.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
+            <TableView layoutX="643.0" layoutY="23.0" prefHeight="353.0" prefWidth="563.0">
               <columns>
-                <TableColumn prefWidth="247.0" text="Stations" />
-                <TableColumn prefWidth="218.0" text="Lignes" />
+                <TableColumn prefWidth="276.0" text="Stations" />
+                <TableColumn prefWidth="233.0" text="Lignes" />
               </columns>
             </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="61.0" prefWidth="1333.0">
+         <children>
+            <Label fx:id="lblStatus" layoutX="6.0" layoutY="39.0" text="En attente de recherche" textFill="#797676" />
+            <Label fx:id="lblNbStation" layoutX="1189.0" layoutY="39.0" prefHeight="17.0" prefWidth="138.0" text="Nombre de stations : " textFill="#797676" />
          </children>
       </AnchorPane>
    </children>
