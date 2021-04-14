@@ -1,25 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package esi.atl.jdbc;
+package esi.atl.repository;
 
-import esi.atl.config.ConfigManager;
 import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
-import java.io.IOException;
+import esi.atl.jdbc.StibDao;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class StibDaoTest {
+@ExtendWith(MockitoExtension.class)
+@RunWith(JUnitPlatform.class)
+public class StationRepositoryTest {
+
+    @Mock
+    private StibDao mock;
 
     private static final int KEY = 8764;
 
@@ -28,9 +34,8 @@ public class StibDaoTest {
 
     private final List<StationDto> all;
 
-    private StibDao instance;
+    public StationRepositoryTest() {
 
-    public StibDaoTest() {
         simonis = new StationDto(KEY, "SIMONIS");
         schweitzer = new StationDto(99_999, "SCHWEITZER");
 
@@ -94,63 +99,80 @@ public class StibDaoTest {
                 new StationDto(8814, "HOUBA-BRUGMANN"),
                 new StationDto(8824, "HEYSEL"),
                 new StationDto(8833, "ROI BAUDOUIN"));
-        try {
-            ConfigManager.getInstance().load();
-            instance = StibDao.getInstance();
-        } catch (RepositoryException | IOException ex) {
-            org.junit.jupiter.api.Assertions.fail("Erreur de connection à la"
-                    + " base de données de test", ex);
-        }
+    }
+
+    @BeforeEach
+    void init() throws RepositoryException {
+        //Mock behaviour
+        Mockito.lenient()
+                .when(mock.select(simonis.getKey())).thenReturn(simonis);
+        Mockito.lenient()
+                .when(mock.select(schweitzer.getKey())).thenReturn(null);
+        Mockito.lenient().when(mock.selectAll()).thenReturn(all);
+        Mockito.lenient()
+                .when(mock.select(null)).thenThrow(RepositoryException.class);
     }
 
     /**
-     * Test of selectAll method, of class StibDao.
-     *
-     * @throws java.lang.Exception
+     * Test of getAll method, of class StationRepository.
      */
     @Test
-    public void testSelectAll() throws Exception {
-        System.out.println("Test selectAll");
-        List<StationDto> result = instance.selectAll();
+    public void testGetAll() throws Exception {
+        System.out.println("test get All");
+        //Arrange
+        StationRepository repository = new StationRepository(mock);
+        //Action
+        List<StationDto> result = repository.getAll();
+        //Assert
         assertEquals(all, result);
+        Mockito.verify(mock, times(1)).selectAll();
     }
 
     /**
-     * Test of select method, of class StibDao.
-     *
-     * @throws java.lang.Exception
+     * Test of get method, of class StationRepository.
      */
     @Test
-    public void testSelectExist() throws Exception {
-        System.out.println("test select exist");
-        StationDto result = instance.select(KEY);
-        assertEquals(simonis, result);
+    public void testGetExist() throws Exception {
+        System.out.println("test get exist");
+        //Arrange
+        StationDto expected = simonis;
+        StationRepository repository = new StationRepository(mock);
+        //Action
+        StationDto result = repository.get(KEY);
+        //Assert
+        assertEquals(expected, result);
+        Mockito.verify(mock, times(1)).select(KEY);
     }
 
     /**
-     * Test of select method, of class StibDao.
-     *
-     * @throws java.lang.Exception
+     * Test of get method, of class StationRepository.
      */
     @Test
-    public void testSelectNotExist() throws Exception {
-        System.out.println("test select not exist");
-        StationDto result = instance.select(schweitzer.getKey());
-        assertNull(result);
+    public void testGetNotExist() throws Exception {
+        System.out.println("test get not exist");
+        //Arrange
+        StationDto expected = null;
+        StationRepository repository = new StationRepository(mock);
+        //Action
+        StationDto result = repository.get(schweitzer.getKey());
+        //Assert
+        assertEquals(expected, result);
+        Mockito.verify(mock, times(1)).select(schweitzer.getKey());
     }
 
     /**
-     * Test of select method, of class StibDao.
-     *
-     * @throws java.lang.Exception
+     * Test of get method, of class StationRepository.
      */
     @Test
-    public void testSelectInvalidParameter() throws Exception {
-        System.out.println("test select invalid parameter");
-        Integer incorrect = null;
+    public void testGetInvalidParam() throws Exception {
+        System.out.println("test get invalid parameter");
+        //Arrange
+        StationRepository repository = new StationRepository(mock);
+        //Assert
         assertThrows(RepositoryException.class, () -> {
-            StationDto result = instance.select(incorrect);
+            repository.get(null);
         });
-
+        Mockito.verify(mock, times(1)).select(null);
     }
+
 }

@@ -35,16 +35,5 @@ public interface Repository<K, T extends Dto<K>> {
      * element.
      */
     T get(K key) throws RepositoryException;
-
-    /**
-     * Returns true if the element exist in the repository and false otherwise.
-     * An element is found by this key.
-     *
-     * @param key key of the element.
-     * @return true if the element exist in the repository and false otherwise.
-     * @throws RepositoryException if the repository can't access to the
-     * element.
-     */
-    boolean contains(K key) throws RepositoryException;
-
+    
 }

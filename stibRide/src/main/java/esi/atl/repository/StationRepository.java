@@ -31,11 +31,4 @@ public class StationRepository implements Repository<Integer, StationDto> {
         StationDto refreshItem = dao.select(key);
         return refreshItem;
     }
-
-    @Override
-    public boolean contains(Integer key) throws RepositoryException {
-        StationDto refreshItem = dao.select(key);
-        return refreshItem != null;
-    }
-
 }
