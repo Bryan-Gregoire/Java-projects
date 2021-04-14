@@ -9,15 +9,15 @@ import java.util.List;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class StibRepository implements Repository<Integer, StationDto> {
+public class StationRepository implements Repository<Integer, StationDto> {
 
     private final StibDao dao;
 
-    public StibRepository() throws RepositoryException {
+    public StationRepository() throws RepositoryException {
         dao = StibDao.getInstance();
     }
 
-    StibRepository(StibDao dao) {
+    StationRepository(StibDao dao) {
         this.dao = dao;
     }
 

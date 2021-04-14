@@ -4,6 +4,11 @@ import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.repository.Dao;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,14 +30,46 @@ public class StibDao implements Dao<Integer, StationDto> {
 
     @Override
     public List<StationDto> selectAll() throws RepositoryException {
-        // TODO
-        return null;
+        String sql = "SELECT id, name  FROM STATIONS";
+        ArrayList<StationDto> listDtos = new ArrayList<>();
+        try (Statement stmt = connexion.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                StationDto dto = new StationDto(rs.getInt("id"),
+                        rs.getString("name"));
+                listDtos.add(dto);
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+        return listDtos;
     }
 
     @Override
     public StationDto select(Integer key) throws RepositoryException {
-        // TODO 
-        return null;
+        if (key == null) {
+            throw new RepositoryException("Aucune clé donnée en paramètre");
+        }
+        
+        String sql = "SELECT id, name FROM STATIONS WHERE  id = ?";
+        StationDto dto = null;
+
+        try (PreparedStatement pstmt = connexion.prepareStatement(sql)) {
+            pstmt.setInt(1, key);
+            ResultSet rs = pstmt.executeQuery();
+
+            int count = 0;
+            while (rs.next()) {
+                dto = new StationDto(rs.getInt(1), rs.getString(2));
+                count++;
+            }
+            if (count > 1) {
+                throw new RepositoryException("Record pas unique " + key);
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+        return dto;
     }
 
     private static class StibDaoHolder {

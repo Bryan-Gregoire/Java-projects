@@ -10,6 +10,10 @@ import java.beans.PropertyChangeSupport;
 public class Facade implements Model {
 
     private PropertyChangeSupport pcs;
+    
+    public void getAllStations() {
+        
+    } 
 
     /**
      * Add listener
