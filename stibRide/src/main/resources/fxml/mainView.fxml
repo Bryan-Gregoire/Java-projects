@@ -52,13 +52,13 @@
                         <Image url="@../image/logo.png" />
                     </image>
                 </ImageView>
-                <SearchableComboBox layoutX="297.0" layoutY="209.0" fx:id="listStations"/>
+                <SearchableComboBox fx:id="origin" layoutX="297.0" layoutY="209.0" />
                 <Label layoutX="350.0" layoutY="174.0" prefHeight="25.0" prefWidth="90.0" text="Origine : " underline="true">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <SearchableComboBox layoutX="297.0" layoutY="293.0" fx:id="listStations2"/>
+                <SearchableComboBox fx:id="destination" layoutX="297.0" layoutY="293.0" />
                 <Label layoutX="349.0" layoutY="255.0" text="Destination : " underline="true">
                     <font>
                         <Font size="14.0" />

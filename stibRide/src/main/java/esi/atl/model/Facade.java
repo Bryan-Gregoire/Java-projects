@@ -1,7 +1,11 @@
 package esi.atl.model;
 
+import esi.atl.dto.StationDto;
+import esi.atl.exception.RepositoryException;
+import esi.atl.repository.StationRepository;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 /**
  *
@@ -10,10 +14,18 @@ import java.beans.PropertyChangeSupport;
 public class Facade implements Model {
 
     private PropertyChangeSupport pcs;
-    
-    public void getAllStations() {
-        
-    } 
+
+    private final StationRepository repo;
+
+    public Facade() throws RepositoryException {
+        this.pcs = new PropertyChangeSupport(this);
+        this.repo = new StationRepository();
+    }
+
+    @Override
+    public List<StationDto> getAllStations() throws RepositoryException {
+        return repo.getAll();
+    }
 
     /**
      * Add listener

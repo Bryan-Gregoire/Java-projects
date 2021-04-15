@@ -26,11 +26,12 @@ public class Main extends Application {
         Parent root = loader.load();
 
         Facade model = new Facade();
-        View view = new View();
+        View view = loader.getController();
+
         Presenter presenter = new Presenter(model, view);
 
-        //model.addPropertyChangeListener(presenter);
-        //presenter.initialise();
+        model.addPropertyChangeListener(presenter);
+        presenter.initialise();
         Scene scene = new Scene(root);
 
         stage.setScene(scene);

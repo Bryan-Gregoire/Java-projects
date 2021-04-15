@@ -8,10 +8,6 @@ public class StationDto extends Dto<Integer> {
 
     private String name;
 
-//    public StationDto(Integer key) {
-//        super(key);
-//    }
-
     public StationDto(Integer id, String name) {
         super(id);
         this.name = name;

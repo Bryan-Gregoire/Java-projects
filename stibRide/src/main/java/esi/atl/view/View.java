@@ -22,10 +22,10 @@ public class View implements Initializable {
     private Label lblNbStation;
 
     @FXML
-    private SearchableComboBox<StationDto> listStations;
+    private SearchableComboBox origin;
 
     @FXML
-    private SearchableComboBox<StationDto> listStations2;
+    private SearchableComboBox destination;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -33,8 +33,13 @@ public class View implements Initializable {
     }
 
     public void fillSearchableComboBox(List<StationDto> dtos) {
-        listStations.getItems().addAll(dtos);
-        listStations2.getItems().addAll(dtos);
+        for (StationDto dto : dtos) {
+            String station = dto.getName();
+            origin.getItems().add(station);
+            destination.getItems().add(station);
+        }
+        origin.setValue(dtos.get(0).getName());
+        destination.setValue(dtos.get(dtos.size() - 1).getName());
     }
 
 }
