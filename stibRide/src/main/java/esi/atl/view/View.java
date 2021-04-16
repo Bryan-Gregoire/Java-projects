@@ -32,6 +32,23 @@ public class View implements Initializable {
 
     }
 
+    public void setLblStatusText(String text) {
+        this.lblStatus.setText(text);
+    }
+
+    public void setLblNbStationText(String text) {
+        this.lblNbStation.setText(text);
+
+    }
+
+    public String getOrigin() {
+        return origin.getValue().toString();
+    }
+
+    public String getDestination() {
+        return destination.getValue().toString();
+    }
+
     public void fillSearchableComboBox(List<StationDto> dtos) {
         for (StationDto dto : dtos) {
             String station = dto.getName();

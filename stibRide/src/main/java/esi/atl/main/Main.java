@@ -25,7 +25,7 @@ public class Main extends Application {
                 .getResource("/fxml/mainView.fxml"));
         Parent root = loader.load();
 
-        Facade model = new Facade();
+        Facade model = new Facade(); // check
         View view = loader.getController();
         Presenter presenter = new Presenter(model, view);
 
