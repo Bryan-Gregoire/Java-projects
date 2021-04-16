@@ -18,13 +18,15 @@ class DBManager {
     }
 
     Connection getConnection() throws RepositoryException {
-        String jdbcUrl = "jdbc:sqlite:" + ConfigManager.getInstance().getProperties("db.url");
+        String jdbcUrl = "jdbc:sqlite:" + ConfigManager.getInstance()
+                .getProperties("db.url");
         // || connection.isClosed()
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(jdbcUrl);
             } catch (SQLException ex) {
-                throw new RepositoryException("Connexion impossible: " + ex.getMessage());
+                throw new RepositoryException("Unable to connect: "
+                        + ex.getMessage());
             }
         }
         return connection;
@@ -34,7 +36,8 @@ class DBManager {
         try {
             getConnection().setAutoCommit(false);
         } catch (SQLException ex) {
-            throw new RepositoryException("Impossible de démarrer une transaction: " + ex.getMessage());
+            throw new RepositoryException("Unable to start a transaction: "
+                    + ex.getMessage());
         }
     }
 
@@ -57,11 +60,12 @@ class DBManager {
                     isol = java.sql.Connection.TRANSACTION_SERIALIZABLE;
                     break;
                 default:
-                    throw new RepositoryException("Degré d'isolation inexistant!");
+                    throw new RepositoryException("No insulation level!");
             }
             getConnection().setTransactionIsolation(isol);
         } catch (SQLException ex) {
-            throw new RepositoryException("Impossible de démarrer une transaction: " + ex.getMessage());
+            throw new RepositoryException("Unable to start a transaction: "
+                    + ex.getMessage());
         }
     }
 
@@ -70,7 +74,8 @@ class DBManager {
             getConnection().commit();
             getConnection().setAutoCommit(true);
         } catch (SQLException ex) {
-            throw new RepositoryException("Impossible de valider la transaction: " + ex.getMessage());
+            throw new RepositoryException("Unable to validate the transaction: "
+                    + ex.getMessage());
         }
     }
 
@@ -79,7 +84,8 @@ class DBManager {
             getConnection().rollback();
             getConnection().setAutoCommit(true);
         } catch (SQLException ex) {
-            throw new RepositoryException("Impossible d'annuler la transaction: " + ex.getMessage());
+            throw new RepositoryException("Unable to cancel the transaction: "
+                    + ex.getMessage());
         }
     }
 

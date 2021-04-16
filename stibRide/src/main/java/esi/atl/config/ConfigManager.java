@@ -32,7 +32,7 @@ public class ConfigManager {
         try (InputStream input = new FileInputStream(url)) {
             prop.load(input);
         } catch (IOException ex) {
-            throw new IOException("Chargement configuration impossible ", ex);
+            throw new IOException("Configuration cannot be loaded ", ex);
         }
     }
 

@@ -27,7 +27,6 @@ public class Main extends Application {
 
         Facade model = new Facade();
         View view = loader.getController();
-
         Presenter presenter = new Presenter(model, view);
 
         model.addPropertyChangeListener(presenter);
