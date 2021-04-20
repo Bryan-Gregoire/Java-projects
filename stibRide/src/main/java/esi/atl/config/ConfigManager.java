@@ -29,7 +29,7 @@ public class ConfigManager {
      * @throws IOException if no file is found.
      */
     public void load() throws IOException {
-        try (InputStream input = new FileInputStream(url)) {
+        try ( InputStream input = new FileInputStream(url)) {
             prop.load(input);
         } catch (IOException ex) {
             throw new IOException("Configuration cannot be loaded ", ex);

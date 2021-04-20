@@ -17,7 +17,7 @@ public class Node {
 
     private Integer distance = Integer.MAX_VALUE;
 
-    Map<Node, Integer> adjacentNodes = new HashMap<>();    
+    Map<Node, Integer> adjacentNodes = new HashMap<>();
 
     public void addDestination(Node destination, int distance) {
         adjacentNodes.put(destination, distance);

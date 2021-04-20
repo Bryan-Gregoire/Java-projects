@@ -185,7 +185,7 @@ public class View implements Initializable, InterfaceView {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(MyThreads.ACTIVE)) {
-            Platform.runLater(new Runnable() {
+            Platform.runLater(new Runnable() { // Laisser priorité au thread du modèle.
                 @Override
                 public void run() {
                     leftStatus.setText("Threads actifs : " 
@@ -195,10 +195,9 @@ public class View implements Initializable, InterfaceView {
         }
 
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
-            Platform.runLater(new Runnable() {
+            Platform.runLater(new Runnable() { // Laisser priorité au thread du modèle.
                 @Override
                 public void run() {
-                    // Laisser priorité au thread du modèle.
                     dataArray.add((ArrayData) evt.getNewValue());
                     if (sortChoice.getValue().equals(SortType.BUBBLE)) {
                         bubbleSortSerie.getData().add(new XYChart.Data<>(

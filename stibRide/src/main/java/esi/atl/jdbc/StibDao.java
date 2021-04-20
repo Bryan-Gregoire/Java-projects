@@ -1,6 +1,7 @@
 package esi.atl.jdbc;
 
 import esi.atl.dto.StationDto;
+import esi.atl.dto.StopDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.repository.Dao;
 import java.sql.Connection;
@@ -32,8 +33,10 @@ public class StibDao implements Dao<Integer, StationDto> {
     public List<StationDto> selectAll() throws RepositoryException {
         String sql = "SELECT id, name  FROM STATIONS";
         ArrayList<StationDto> listDtos = new ArrayList<>();
-        try (Statement stmt = connexion.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+
+        try ( Statement stmt = connexion.createStatement();  ResultSet rs
+                = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 StationDto dto = new StationDto(rs.getInt("id"),
                         rs.getString("name"));
@@ -48,13 +51,13 @@ public class StibDao implements Dao<Integer, StationDto> {
     @Override
     public StationDto select(Integer key) throws RepositoryException {
         if (key == null) {
-            throw new RepositoryException("Aucune clé donnée en paramètre");
+            throw new RepositoryException("No key given in parameter");
         }
-        
+
         String sql = "SELECT id, name FROM STATIONS WHERE  id = ?";
         StationDto dto = null;
 
-        try (PreparedStatement pstmt = connexion.prepareStatement(sql)) {
+        try ( PreparedStatement pstmt = connexion.prepareStatement(sql)) {
             pstmt.setInt(1, key);
             ResultSet rs = pstmt.executeQuery();
 
@@ -64,12 +67,31 @@ public class StibDao implements Dao<Integer, StationDto> {
                 count++;
             }
             if (count > 1) {
-                throw new RepositoryException("Record pas unique " + key);
+                throw new RepositoryException("Not a unique record " + key);
             }
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
         return dto;
+    }
+
+    public List<StopDto> getFullStop()
+            throws RepositoryException {
+
+        String sql = "Select id_line, id_station, id_order FROM STOPS";
+
+        List<StopDto> dtos = new ArrayList();
+        try ( Statement stmt = connexion.createStatement();  ResultSet rs
+                = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                dtos.add(new StopDto(rs.getInt(1), rs.getInt(2), rs.getInt(3)));
+            }
+
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+        return dtos;
     }
 
     private static class StibDaoHolder {
