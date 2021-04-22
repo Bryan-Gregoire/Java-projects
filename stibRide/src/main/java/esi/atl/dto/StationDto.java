@@ -1,24 +1,34 @@
 package esi.atl.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
 public class StationDto extends Dto<Integer> {
 
-    private String name;
+    private final String name;
+    private final List<StopDto> stops;
 
-    public StationDto(Integer id, String name) {
-        super(id);
+    public StationDto(Integer key, String name) {
+        super(key);
         this.name = name;
+        stops = new ArrayList();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<StopDto> getStops() {
+        return stops;
+    }
+
+    @Override
+    public String toString() {
+        return "StationDto{" + "id= " + getKey() + "name=" + name + ", stops=" + stops + '}';
     }
 
 }

@@ -28,4 +28,10 @@ public class StopDto {
         return order;
     }
 
+    @Override
+    public String toString() {
+        return "StopDto{" + "line=" + line + ", station=" + station + ", order=" + order + '}';
+    }
+
+  
 }

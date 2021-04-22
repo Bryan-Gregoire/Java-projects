@@ -1,6 +1,7 @@
 package esi.atl.repository;
 
 import esi.atl.dto.StationDto;
+import esi.atl.dto.StopDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.jdbc.StibDao;
 import java.util.List;
@@ -30,5 +31,9 @@ public class StationRepository implements Repository<Integer, StationDto> {
     public StationDto get(Integer key) throws RepositoryException {
         StationDto refreshItem = dao.select(key);
         return refreshItem;
+    }
+
+    public List<StopDto> getAllStops() throws RepositoryException {
+        return dao.getFullStop();
     }
 }

@@ -35,5 +35,5 @@ public interface Repository<K, T extends Dto<K>> {
      * element.
      */
     T get(K key) throws RepositoryException;
-    
+
 }

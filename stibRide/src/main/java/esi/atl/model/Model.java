@@ -9,6 +9,9 @@ import java.util.List;
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
 public interface Model {
-    
-    public List<StationDto> getAllStations() throws RepositoryException;
+
+    public List<StationDto> getAllStationsName() throws RepositoryException;
+
+    public List<StationDto> getFullStation() throws RepositoryException;
+
 }

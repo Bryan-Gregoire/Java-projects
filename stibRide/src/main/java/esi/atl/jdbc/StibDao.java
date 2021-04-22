@@ -22,7 +22,6 @@ public class StibDao implements Dao<Integer, StationDto> {
 
     private StibDao() throws RepositoryException {
         connexion = DBManager.getInstance().getConnection();
-
     }
 
     public static StibDao getInstance() throws RepositoryException {
@@ -32,7 +31,8 @@ public class StibDao implements Dao<Integer, StationDto> {
     @Override
     public List<StationDto> selectAll() throws RepositoryException {
         String sql = "SELECT id, name  FROM STATIONS";
-        ArrayList<StationDto> listDtos = new ArrayList<>();
+
+        List<StationDto> listDtos = new ArrayList<>();
 
         try ( Statement stmt = connexion.createStatement();  ResultSet rs
                 = stmt.executeQuery(sql)) {
@@ -78,7 +78,8 @@ public class StibDao implements Dao<Integer, StationDto> {
     public List<StopDto> getFullStop()
             throws RepositoryException {
 
-        String sql = "Select id_line, id_station, id_order FROM STOPS";
+        String sql = "SELECT id_line, id_station, id_order from STOPS "
+                + "order by id_station";
 
         List<StopDto> dtos = new ArrayList();
         try ( Statement stmt = connexion.createStatement();  ResultSet rs
