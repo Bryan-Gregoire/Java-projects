@@ -26,11 +26,6 @@ public class StationDto extends Dto<Integer> {
         return stops;
     }
 
-    @Override
-    public String toString() {
-        return "StationDto{" + "id= " + getKey() + "name=" + name + ", stops=" + stops + '}';
-    }
-
     public void addStops(StopDto stop) {
         stops.add(stop);
     }

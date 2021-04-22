@@ -65,6 +65,7 @@ public class Facade implements Model {
         for (int i = 0; i < stations.size(); i++) {
             nodes.add(new Node(stations.get(i).getName()));
         }
+        
         for (int i = 0; i < nodes.size(); i++) { // on parcourt toutes les station
             StationDto origin = stations.get(i);
 
@@ -88,6 +89,7 @@ public class Facade implements Model {
                 }
             }
         }
+        graph.getNodes().addAll(nodes);
     }
 
 //    private void addStationsAdjacent(Graph graph, List<StationDto> stations) {
@@ -104,6 +106,8 @@ public class Facade implements Model {
 //            }
 //        }
 //    }
+    
+    
     /**
      * Add listener
      *
