@@ -32,7 +32,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class View implements Initializable, InterfaceView {
+public class View implements Initializable, InterfaceView { // Observe le modèle (s'enregistre dans le controller)
 
     @FXML
     private MenuItem quitItem;
@@ -92,7 +92,7 @@ public class View implements Initializable, InterfaceView {
         // Start
         LocalDateTime startTime = LocalDateTime.now();
 
-        // Item quit
+        // Item quit --> fait une méthode initMenu()
         quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         quitItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -102,7 +102,7 @@ public class View implements Initializable, InterfaceView {
         });
         // End Item quit
 
-        // TableView
+        // TableView --> initTableView
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         sizeCol.setCellValueFactory(new PropertyValueFactory<>("size"));
         swapCol.setCellValueFactory(
@@ -157,6 +157,7 @@ public class View implements Initializable, InterfaceView {
 
                 controller.sortNbArrays(value, size, sort);
                 progress = 0;
+                //reactivation des boutons
             }
         });
         // End Start button
@@ -184,18 +185,14 @@ public class View implements Initializable, InterfaceView {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(MyThreads.ACTIVE)) {
-            Platform.runLater(new Runnable() { // Laisser priorité au thread du modèle.
-                @Override
-                public void run() {
-                    leftStatus.setText("Threads actifs : " 
-                            + Thread.activeCount());
-                }
-            });
-        }
+            Platform.runLater(() -> { // on passe les instruction de mise à jour au thread jvafx qui fera la mise à jour 
+                leftStatus.setText("Threads actifs : "
+                        + Thread.activeCount());
+            }
+            );
 
         if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
-            Platform.runLater(new Runnable() { // Laisser priorité au thread du modèle.
+            Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     dataArray.add((ArrayData) evt.getNewValue());
@@ -211,7 +208,7 @@ public class View implements Initializable, InterfaceView {
                                         .getNbOperationsSort()));
                     }
 
-                    progress = progress + 0.09090909091;
+                    progress = progress + 0.09090909091; // bof :-) 
                     progressBar.setProgress(progress);
                     if (progress >= 1) {
                         disableBottomElements(false);

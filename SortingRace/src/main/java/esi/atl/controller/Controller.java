@@ -25,6 +25,7 @@ public class Controller {
         Objects.requireNonNull(ViewFX, "View is required");
         this.model = facade;
         this.view = ViewFX;
+        // on enregistre la vue comme observateur du modèle.
     }
 
     public void sortNbArrays(int nbThreads, int sizeArray, SortType typeSort) {

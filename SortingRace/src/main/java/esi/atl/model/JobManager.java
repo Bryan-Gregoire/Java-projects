@@ -6,7 +6,7 @@ package esi.atl.model;
  */
 public class JobManager {
 
-    private final int[] arraySort;
+    private final int[] arraySort; 
     private int step;
 
     public JobManager(int[] arraySort) {

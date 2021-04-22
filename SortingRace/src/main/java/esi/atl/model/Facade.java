@@ -9,7 +9,8 @@ import java.util.Random;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class Facade implements Model {
+public class Facade implements Model { // Observable, elle est observé par la vue. 
+    // la facade est un observateur:  observe les threads
 
     private List<MyThreads> listThreads;
     private final Random rnd;
@@ -23,7 +24,7 @@ public class Facade implements Model {
     public void sortArrays(int nbThread, int size, SortType sort,
             PropertyChangeListener listener) {
         fillThreadWithArray(nbThread, size, sort);
-        addPropertyChangeListenerToAll(listener);
+        addPropertyChangeListenerToAll(listener); // this est l'observateur des threads.
         startThreads();
     }
 
@@ -36,7 +37,7 @@ public class Facade implements Model {
     private void fillThreadWithArray(int nbThread, int sizeArray,
             SortType sortType) {
         listThreads.clear();
-        int[] array = new int[sizeArray];
+        int[] array = new int[sizeArray]; // pas ici.
 
         for (int i = 0; i < sizeArray; i++) {
             array[i] = rnd.nextInt(sizeArray);
@@ -66,4 +67,10 @@ public class Facade implements Model {
         }
     }
 
+    
+    /*
+    update() :
+        - appelé par les thread quand elles ont fini 1 des tris
+        - notifie les observateurs (c-a-d: la vue)
+    */
 }
