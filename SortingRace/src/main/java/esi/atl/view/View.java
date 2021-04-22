@@ -3,6 +3,7 @@ package esi.atl.view;
 import esi.atl.model.ArrayData;
 import esi.atl.model.Level;
 import esi.atl.controller.Controller;
+import esi.atl.model.Facade;
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.time.Duration;
@@ -24,7 +25,6 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCombination;
-import esi.atl.model.MyThreads;
 import esi.atl.model.SortType;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -32,7 +32,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class View implements Initializable, InterfaceView { // Observe le modèle (s'enregistre dans le controller)
+public class View implements Initializable, InterfaceView {
 
     @FXML
     private MenuItem quitItem;
@@ -89,93 +89,25 @@ public class View implements Initializable, InterfaceView { // Observe le modèl
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Start
         LocalDateTime startTime = LocalDateTime.now();
 
-        // Item quit --> fait une méthode initMenu()
-        quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
-        quitItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                System.exit(0);
-            }
-        });
-        // End Item quit
+        initMenuQuit();
 
-        // TableView --> initTableView
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        sizeCol.setCellValueFactory(new PropertyValueFactory<>("size"));
-        swapCol.setCellValueFactory(
-                new PropertyValueFactory<>("nbOperationsSort"));
-        durationCol.setCellValueFactory(
-                new PropertyValueFactory<>("timeToSort"));
-        dataArray = FXCollections.observableArrayList();
-        table.setItems(dataArray);
+        initTableView();
 
-        // TableView end
-        // LineChart 
-        bubbleSortSerie = new XYChart.Series();
-        bubbleSortSerie.setName("Tri à bulles");
-        mergeSortSerie = new XYChart.Series();
-        mergeSortSerie.setName("Tri fusion");
-        chart.getData().addAll(bubbleSortSerie, mergeSortSerie);
-        // End LineChart
+        initLineChart();
 
-        // ChoiceBox types of sorting
-        sortChoice.setValue(SortType.BUBBLE);
-        sortChoice.getItems().addAll(SortType.values());
-        // End ChoiceBox types of sorting
+        initChoiceBox();
 
-        // Thread Spinner
-        final int spinnerDefaultValue = 1;
-        SpinnerValueFactory<Integer> valueFactory
-                = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10,
-                        spinnerDefaultValue);
-        threadSpinner.setValueFactory(valueFactory);
-        // End Thread Spinner
+        initSpinner();
 
-        // ChoiceBox of the level of difficulty
-        configurationChoice.setValue(Level.VERY_EASY);
-        configurationChoice.getItems().addAll(Level.values());
-        // End ChoiceBox of the level of difficulty
+        initLevelChoiceBox();
 
-        // Start Button
-        this.start.setOnAction(new EventHandler<ActionEvent>() {
+        startButtonSortAction();
 
-            @Override
-            public void handle(ActionEvent t) {
-                progressBar.setProgress(progress);
-                disableBottomElements(true);
-                int value = (int) threadSpinner.getValue();
-                int size = configurationChoice.getValue().getLevel();
-                SortType sort = (SortType) sortChoice.getValue();
-                if (sort == SortType.BUBBLE) {
-                    bubbleSortSerie.getData().clear();
-                } else {
-                    mergeSortSerie.getData().clear();
-                }
-
-                controller.sortNbArrays(value, size, sort);
-                progress = 0;
-                //reactivation des boutons
-            }
-        });
-        // End Start button
-
-        // Label number of active threads
         leftStatus.setText("Threads actifs : " + Thread.activeCount());
-        // End Label number of active threads
 
-        // Label start time, end time and duration in milliseconds
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(startTime, end);
-        DateTimeFormatter formatter
-                = DateTimeFormatter.ofPattern(("HH:mm:ss:SSS"));
-        rightStatus.setText("Derniere exécution | Début : "
-                + startTime.format(formatter) + " - " + "Fin : "
-                + end.format(formatter) + " Durée | Duration : "
-                + duration.toMillis() + " ms ");
-        // End Label start time, end time and duration in milliseconds
+        timeToLaunch(startTime);
     }
 
     @Override
@@ -185,16 +117,15 @@ public class View implements Initializable, InterfaceView { // Observe le modèl
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-            Platform.runLater(() -> { // on passe les instruction de mise à jour au thread jvafx qui fera la mise à jour 
-                leftStatus.setText("Threads actifs : "
-                        + Thread.activeCount());
-            }
-            );
+        Platform.runLater(() -> { // on passe les instruction de mise à jour au thread jvafx qui fera la mise à jour 
+            leftStatus.setText("Threads actifs : " + Thread.activeCount());
+        });
 
-        if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
+        if (evt.getPropertyName().equals(Facade.ARRAY_SORT)) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
                     dataArray.add((ArrayData) evt.getNewValue());
                     if (sortChoice.getValue().equals(SortType.BUBBLE)) {
                         bubbleSortSerie.getData().add(new XYChart.Data<>(
@@ -212,11 +143,91 @@ public class View implements Initializable, InterfaceView { // Observe le modèl
                     progressBar.setProgress(progress);
                     if (progress >= 1) {
                         disableBottomElements(false);
+                        progress = 0;
                     }
                 }
             });
 
         }
+    }
+
+    private void initMenuQuit() {
+        quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
+        quitItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private void initTableView() {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        sizeCol.setCellValueFactory(new PropertyValueFactory<>("size"));
+        swapCol.setCellValueFactory(
+                new PropertyValueFactory<>("nbOperationsSort"));
+        durationCol.setCellValueFactory(
+                new PropertyValueFactory<>("timeToSort"));
+        dataArray = FXCollections.observableArrayList();
+        table.setItems(dataArray);
+    }
+
+    private void initLineChart() {
+        bubbleSortSerie = new XYChart.Series();
+        bubbleSortSerie.setName("Tri à bulles");
+        mergeSortSerie = new XYChart.Series();
+        mergeSortSerie.setName("Tri fusion");
+        chart.getData().addAll(bubbleSortSerie, mergeSortSerie);
+    }
+
+    private void initChoiceBox() {
+        sortChoice.setValue(SortType.BUBBLE);
+        sortChoice.getItems().addAll(SortType.values());
+    }
+
+    private void initSpinner() {
+        int spinnerDefaultValue = 1;
+        SpinnerValueFactory<Integer> valueFactory
+                = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10,
+                        spinnerDefaultValue);
+        threadSpinner.setValueFactory(valueFactory);
+    }
+
+    private void initLevelChoiceBox() {
+        configurationChoice.setValue(Level.VERY_EASY);
+        configurationChoice.getItems().addAll(Level.values());
+    }
+
+    private void startButtonSortAction() {
+        this.start.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                progressBar.setProgress(progress);
+                disableBottomElements(true);
+                int value = (int) threadSpinner.getValue();
+                int size = configurationChoice.getValue().getLevel();
+                SortType sort = (SortType) sortChoice.getValue();
+                if (sort == SortType.BUBBLE) {
+                    bubbleSortSerie.getData().clear();
+                } else {
+                    mergeSortSerie.getData().clear();
+                }
+
+                controller.sortNbArrays(value, size, sort);
+            }
+        });
+    }
+
+    private void timeToLaunch(LocalDateTime start) {
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        DateTimeFormatter formatter
+                = DateTimeFormatter.ofPattern(("HH:mm:ss:SSS"));
+        rightStatus.setText("Derniere exécution | Début : "
+                + start.format(formatter) + " - " + "Fin : "
+                + end.format(formatter) + " Durée | Duration : "
+                + duration.toMillis() + " ms ");
     }
 
     private void disableBottomElements(boolean disable) {
@@ -225,4 +236,5 @@ public class View implements Initializable, InterfaceView { // Observe le modèl
         threadSpinner.setDisable(disable);
         configurationChoice.setDisable(disable);
     }
+
 }

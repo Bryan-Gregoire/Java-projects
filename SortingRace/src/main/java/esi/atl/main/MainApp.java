@@ -25,13 +25,13 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource("/fxml/sort.fxml"));
         Parent root = loader.load();
-        
+
         InterfaceView view = loader.getController();
         Model model = new Facade();
 
         Controller controller = new Controller(model, view);
         view.setController(controller);
-        
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
