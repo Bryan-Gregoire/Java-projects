@@ -65,15 +65,22 @@ public class Facade implements Model {
         for (int i = 0; i < stations.size(); i++) {
             nodes.add(new Node(stations.get(i).getName()));
         }
-        for (int i = 0; i < nodes.size(); i++) {
-            for (int j = 0; j < nodes.size(); j++) {
+        for (int i = 0; i < nodes.size(); i++) { // on parcourt toutes les station
+            StationDto origin = stations.get(i);
+
+            for (int j = 0; j < nodes.size(); j++) { // on cherche les adjacent parmi toutes les stations
+                StationDto target = stations.get(j);
                 if (i != j) {
-                    for (int k = 0; k < stations.get(i).getStops().size(); k++) {
-                        for (int l = 0; l < stations.get(k).getStops().size(); l++) {
-                            if (stations.get(i).getStops().get(k).getLine() == stations.get(j).getStops().get(k).getLine()) {
-                                if (stations.get(i).getStops().get(k).getOrder() - 1 == stations.get(j).getStops().get(k).getOrder()
-                                        || stations.get(i).getStops().get(k).getOrder() + 1 == stations.get(j).getStops().get(k).getOrder()) {
-                                    
+                    for (int k = 0; k < origin.getStops().size(); k++) {
+                        StopDto originStop = origin.getStops().get(k);
+
+                        for (int l = 0; l < target.getStops().size(); l++) {
+                            StopDto targetStop = target.getStops().get(l);
+
+                            if (originStop.getLine() == targetStop.getLine()) {
+                                if (targetStop.getOrder() - 1 == originStop.getOrder()
+                                        || targetStop.getOrder() + 1 == originStop.getOrder()) {
+                                    // attention de ne pas rajouter l'adjacent plusieurs fois 
                                 }
                             }
                         }
