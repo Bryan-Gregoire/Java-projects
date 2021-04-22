@@ -4,7 +4,7 @@ package esi.atl.dto;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class StopDto {
+public class StopDto { //extends DTO ?
 
     private final int line;
     private final int station;
