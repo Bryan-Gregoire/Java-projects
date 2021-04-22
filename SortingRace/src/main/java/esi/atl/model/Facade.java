@@ -1,6 +1,8 @@
 package esi.atl.model;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,35 +11,49 @@ import java.util.Random;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class Facade implements Model { // Observable, elle est observé par la vue. 
-    // la facade est un observateur:  observe les threads
+public class Facade implements Model {
+
+    private final PropertyChangeSupport pcs;
+
+    public static String ARRAY_SORT = "ARRAY_SORTED";
+    public static String ACTIVE_THREAD = "ACTIVE";
 
     private List<MyThreads> listThreads;
     private final Random rnd;
 
     public Facade() {
+        this.pcs = new PropertyChangeSupport(this);
         this.listThreads = new ArrayList<>();
         rnd = new Random();
     }
 
+    /**
+     * Start threads that will sort an array of random values.
+     *
+     * @param nbThread number of threads to create.
+     * @param size size of the array to sort.
+     * @param sort type of sort.
+     */
     @Override
-    public void sortArrays(int nbThread, int size, SortType sort,
-            PropertyChangeListener listener) {
+    public void sortArrays(int nbThread, int size, SortType sort) {
         fillThreadWithArray(nbThread, size, sort);
-        addPropertyChangeListenerToAll(listener); // this est l'observateur des threads.
+        addPropertyChangeListenerToAll(this);
         startThreads();
     }
 
-    private void startThreads() {
-        for (MyThreads listThread : listThreads) {
-            listThread.start();
-        }
-    }
-
+    /**
+     * Create an array of random values, an object that will manage the array to
+     * sort and the type of sorting will be passed as a parameter to all
+     * threads.
+     *
+     * @param nbThread number of threads to create.
+     * @param sizeArray size of the array.
+     * @param sortType type of sort.
+     */
     private void fillThreadWithArray(int nbThread, int sizeArray,
             SortType sortType) {
         listThreads.clear();
-        int[] array = new int[sizeArray]; // pas ici.
+        int[] array = new int[sizeArray];
 
         for (int i = 0; i < sizeArray; i++) {
             array[i] = rnd.nextInt(sizeArray);
@@ -50,16 +66,34 @@ public class Facade implements Model { // Observable, elle est observé par la v
         }
     }
 
-    @Override
-    public void addPropertyChangeListenerToAll(
+    /**
+     * Add the given listener to all my list of threads.
+     *
+     * @param listener the listener.
+     */
+    private void addPropertyChangeListenerToAll(
             PropertyChangeListener listener) {
         for (MyThreads thread : listThreads) {
             thread.addPropertyChangeListener(listener);
         }
     }
 
-    @Override
-    public void removePropertyChangeListenerToAll(
+    /**
+     * Start all the threads.
+     *
+     */
+    private void startThreads() {
+        for (MyThreads listThread : listThreads) {
+            listThread.start();
+        }
+    }
+
+    /**
+     * remove the given listener to all my list of threads.
+     *
+     * @param listener the listener.
+     */
+    private void removePropertyChangeListenerToAll(
             PropertyChangeListener listener) {
 
         for (MyThreads thread : listThreads) {
@@ -67,10 +101,35 @@ public class Facade implements Model { // Observable, elle est observé par la v
         }
     }
 
-    
-    /*
-    update() :
-        - appelé par les thread quand elles ont fini 1 des tris
-        - notifie les observateurs (c-a-d: la vue)
-    */
+    /**
+     * Add listener
+     *
+     * @param listener the listener.
+     */
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove listener.
+     *
+     * @param listener the listener.
+     */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(MyThreads.ACTIVE)) {
+            pcs.firePropertyChange(ACTIVE_THREAD, evt.getOldValue(),
+                    evt.getNewValue());
+        }
+        if (evt.getPropertyName().equals(MyThreads.ARRAY_SORT)) {
+            pcs.firePropertyChange(ARRAY_SORT, evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
 }

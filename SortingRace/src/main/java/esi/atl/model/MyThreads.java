@@ -16,8 +16,8 @@ public class MyThreads extends Thread {
     private long durationMilli;
     private long nbOperations;
 
-    public static String ARRAY_SORT = "array_sorted";
-    public static String ACTIVE = "active thread";
+    public static String ARRAY_SORT = "ARRAY_SORT";
+    public static String ACTIVE = "ACTIVE";
 
     private Sort sorter;
     private JobManager manager;

@@ -25,10 +25,10 @@ public class Controller {
         Objects.requireNonNull(ViewFX, "View is required");
         this.model = facade;
         this.view = ViewFX;
-        // on enregistre la vue comme observateur du modèle.
+        this.model.addPropertyChangeListener(ViewFX);
     }
 
     public void sortNbArrays(int nbThreads, int sizeArray, SortType typeSort) {
-        model.sortArrays(nbThreads, sizeArray, typeSort, this.view);
+        model.sortArrays(nbThreads, sizeArray, typeSort);
     }
 }
