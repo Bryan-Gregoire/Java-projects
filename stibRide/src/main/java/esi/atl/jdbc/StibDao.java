@@ -37,7 +37,7 @@ public class StibDao implements Dao<Integer, StationDto> {
     
     @Override
     public List<StationDto> selectAll() throws RepositoryException {
-        String sql = "SELECT id, name  FROM STATIONS";
+        String sql = "SELECT id, name  FROM STATIONS order by id";
 
         List<StationDto> listDtos = new ArrayList<>();
 

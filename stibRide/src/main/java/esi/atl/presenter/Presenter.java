@@ -1,6 +1,5 @@
 package esi.atl.presenter;
 
-import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.model.Model;
 import esi.atl.view.View;
@@ -28,7 +27,7 @@ public class Presenter implements PropertyChangeListener {
     public void initialise() throws RepositoryException {
         List stations = model.getAllStationsName();
         view.fillSearchableComboBox(stations);
-        model.getFullStation();
+        //model.itinerary();
     }
 
     @Override

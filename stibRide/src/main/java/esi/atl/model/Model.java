@@ -14,4 +14,6 @@ public interface Model {
 
     public List<StationDto> getFullStation() throws RepositoryException;
 
+    public Graph itinerary(int source_Id_Station) throws RepositoryException;
+
 }

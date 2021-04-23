@@ -17,19 +17,23 @@ public class Facade implements Model {
 
     private final PropertyChangeSupport pcs;
 
+    private static String FULL_STATION = "STATIONS";
+    private static String SHORTPATH = "SHORTEST_PATH";
+
     private final StationRepository repo;
 
-    //
+    private List<StationDto> stations;
+
     public Facade() throws RepositoryException {
         this.pcs = new PropertyChangeSupport(this);
         this.repo = new StationRepository();
+        stations = getFullStation(); // FIRE or no ?
     }
 
     @Override
     public List getAllStationsName() throws RepositoryException {
-        List<StationDto> dtos = repo.getAll(); // After this better FIRE or let the FOR ?
         List nameStation = new ArrayList();
-        for (StationDto dto : dtos) {
+        for (StationDto dto : stations) {
             String station = dto.getName();
             nameStation.add(station);
         }
@@ -50,38 +54,46 @@ public class Facade implements Model {
                 }
             }
         }
+        //pcs.firePropertyChange(FULL_STATION, null, stations);  GOOD ?
         return stations;
     }
 
-    public List<StationDto> itinerary(List<StationDto> stations) {
+    @Override
+    public Graph itinerary(int source_Id_Station) throws RepositoryException {
         Graph graph = new Graph();
         fillGraph(graph, stations);
-
+        //Node source = graph.getNodes().
+        //Dijkstra.calculateShortestPathFromSource(graph, source_Id_Station);
         return null;
     }
 
     private void fillGraph(Graph graph, List<StationDto> stations) {
         List<Node> nodes = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {
-            nodes.add(new Node(stations.get(i).getName()));
+            nodes.add(new Node(stations.get(i).getKey()));
         }
-        
-        for (int i = 0; i < nodes.size(); i++) { // on parcourt toutes les station
+
+        for (int i = 0; i < nodes.size(); i++) { // on parcourt toutes les station.
             StationDto origin = stations.get(i);
 
-            for (int j = 0; j < nodes.size(); j++) { // on cherche les adjacent parmi toutes les stations
-                StationDto target = stations.get(j);
+            for (int j = 0; j < nodes.size(); j++) { // on parcourt toutes les station.
+
                 if (i != j) {
-                    for (int k = 0; k < origin.getStops().size(); k++) {
+                    StationDto target = stations.get(j);
+
+                    for (int k = 0; k < origin.getStops().size(); k++) { // on cherche les adjacent parmi toutes les stations.
                         StopDto originStop = origin.getStops().get(k);
 
-                        for (int l = 0; l < target.getStops().size(); l++) {
+                        for (int l = 0; l < target.getStops().size(); l++) { // on cherche les adjacent parmi toutes les stations.
                             StopDto targetStop = target.getStops().get(l);
 
-                            if (originStop.getLine() == targetStop.getLine()) {
-                                if (targetStop.getOrder() - 1 == originStop.getOrder()
-                                        || targetStop.getOrder() + 1 == originStop.getOrder()) {
-                                    // attention de ne pas rajouter l'adjacent plusieurs fois 
+                            if (originStop.getLine() == targetStop.getLine()) { // Si les stations sont sur la même ligne.
+                                if (originStop.getOrder() - 1
+                                        == targetStop.getOrder()
+                                        || originStop.getOrder() + 1
+                                        == targetStop.getOrder()) { // Si la station d'origine a un voisin.
+                                    nodes.get(i)
+                                            .addDestination(nodes.get(j), 1);
                                 }
                             }
                         }
@@ -92,22 +104,6 @@ public class Facade implements Model {
         graph.getNodes().addAll(nodes);
     }
 
-//    private void addStationsAdjacent(Graph graph, List<StationDto> stations) {
-//        for (int i = 0; i < graph.getNodes().size(); i++) {
-//            for (int j = 1; j < graph.getNodes().size(); j++) {
-//                for (int k = 0; k < stations.get(i).getStops().size(); k++) {
-//                    if (stations.get(i).getStops().get(k).getLine() == stations.get(j).getStops().get(k).getLine()) {
-//                        if (stations.get(i).getStops().get(k).getOrder() - 1 == stations.get(j).getStops().get(k).getOrder()
-//                                || stations.get(i).getStops().get(k).getOrder() + 1 == stations.get(j).getStops().get(k).getOrder()) {
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    
     /**
      * Add listener
      *
