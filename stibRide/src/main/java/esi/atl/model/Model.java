@@ -12,8 +12,6 @@ public interface Model {
 
     public List<StationDto> getAllStationsName() throws RepositoryException;
 
-    public List<StationDto> getFullStation() throws RepositoryException;
-
-    public Graph itinerary(int source_Id_Station) throws RepositoryException;
+    public void calculateItinerary(String nameOrigin, String nameDestination) throws RepositoryException;
 
 }

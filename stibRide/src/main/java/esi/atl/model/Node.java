@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Node {
 
-    private int id_Station;
+    private String name;
 
     private List<Node> shortestPath = new LinkedList<>();
 
@@ -23,12 +23,12 @@ public class Node {
         adjacentNodes.put(destination, distance);
     }
 
-    public Node(int id) {
-        this.id_Station = id;
+    public Node(String name) {
+        this.name = name;
     }
 
-    public int getId_Station() {
-        return id_Station;
+    public String getName() {
+        return name;
     }
 
     public List<Node> getShortestPath() {
@@ -43,8 +43,8 @@ public class Node {
         return adjacentNodes;
     }
 
-    public void setId_Station(int id_Station) {
-        this.id_Station = id_Station;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setShortestPath(List<Node> shortestPath) {
@@ -57,6 +57,11 @@ public class Node {
 
     public void setAdjacentNodes(Map<Node, Integer> adjacentNodes) {
         this.adjacentNodes = adjacentNodes;
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" + "name=" + name + '}';
     }
 
 }

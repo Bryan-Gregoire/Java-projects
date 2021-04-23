@@ -1,7 +1,9 @@
 package esi.atl.presenter;
 
 import esi.atl.exception.RepositoryException;
+import esi.atl.model.Facade;
 import esi.atl.model.Model;
+import esi.atl.model.StationData;
 import esi.atl.view.View;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,12 +29,20 @@ public class Presenter implements PropertyChangeListener {
     public void initialise() throws RepositoryException {
         List stations = model.getAllStationsName();
         view.fillSearchableComboBox(stations);
-        //model.itinerary();
+        view.addSearchHandler(this);
+    }
+    
+    public void getItinerary() throws RepositoryException {
+        String origin = view.getOrigin();
+        String destination = view.getDestination();
+        model.calculateItinerary(origin, destination);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //TODO
+        if(evt.getPropertyName().equals(Facade.SHORT_PATH)) {
+            view.addIteneraryData((List<StationData>) evt.getNewValue());
+        }
     }
 
 }

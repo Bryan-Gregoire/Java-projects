@@ -17,8 +17,8 @@ public class Facade implements Model {
 
     private final PropertyChangeSupport pcs;
 
-    private static String FULL_STATION = "STATIONS";
-    private static String SHORTPATH = "SHORTEST_PATH";
+    // public static String FULL_STATION = "STATIONS";
+    public static String SHORT_PATH = "SHORTEST_PATH";
 
     private final StationRepository repo;
 
@@ -27,7 +27,7 @@ public class Facade implements Model {
     public Facade() throws RepositoryException {
         this.pcs = new PropertyChangeSupport(this);
         this.repo = new StationRepository();
-        stations = getFullStation(); // FIRE or no ?
+        getFullStation(); // FIRE or no ?
     }
 
     @Override
@@ -40,9 +40,8 @@ public class Facade implements Model {
         return nameStation;
     }
 
-    @Override
-    public List<StationDto> getFullStation() throws RepositoryException {
-        List<StationDto> stations = repo.getAll();
+    private void getFullStation() throws RepositoryException {
+        stations = repo.getAll();
         List<StopDto> stops = repo.getAllStops();
 
         for (int i = 0; i < stations.size(); i++) {
@@ -54,23 +53,48 @@ public class Facade implements Model {
                 }
             }
         }
-        //pcs.firePropertyChange(FULL_STATION, null, stations);  GOOD ?
-        return stations;
+        //pcs.firePropertyChange(FULL_STATION, null, stations); BIEN DE FAIRE CA ?
+    }
+
+    private void getStibDatas(List<Node> path, Node destination) {
+        List<StationData> datas = new ArrayList<>();
+        path.add(destination);
+        for (int i = 0; i < path.size(); i++) {
+            Node origin = path.get(i);
+
+            for (int j = 0; j < stations.size(); j++) {
+                StationDto target = stations.get(j);
+
+                if (origin.getName().equals(target.getName())) {
+                    List lines = new ArrayList();
+                    for (StopDto stop : target.getStops()) {
+                        lines.add(stop.getLine());
+                    }
+                    datas.add(new StationData(target.getName(), lines));
+                }
+            }
+        }
+        pcs.firePropertyChange(SHORT_PATH, null, datas);
     }
 
     @Override
-    public Graph itinerary(int source_Id_Station) throws RepositoryException {
+    public void calculateItinerary(String nameOrigin, String nameDest) throws RepositoryException {
         Graph graph = new Graph();
-        fillGraph(graph, stations);
-        //Node source = graph.getNodes().
-        //Dijkstra.calculateShortestPathFromSource(graph, source_Id_Station);
-        return null;
+        Node source = fillGraph(graph, stations, nameOrigin);
+        graph = Dijkstra.calculateShortestPathFromSource(graph, source);
+        Node destination = null;
+        for (Node node : graph.getNodes()) { // Parcours mes noeuds pour trouver le noeud de destination.
+            if (node.getName().equals(nameDest)) {
+                destination = node;
+            }
+        }
+        getStibDatas(destination.getShortestPath(), destination);
     }
 
-    private void fillGraph(Graph graph, List<StationDto> stations) {
+    private Node fillGraph(Graph graph, List<StationDto> stations, String sourceName) {
         List<Node> nodes = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {
-            nodes.add(new Node(stations.get(i).getKey()));
+            nodes.add(new Node(stations.get(i).getName()));
         }
 
         for (int i = 0; i < nodes.size(); i++) { // on parcourt toutes les station.
@@ -101,7 +125,15 @@ public class Facade implements Model {
                 }
             }
         }
+
         graph.getNodes().addAll(nodes);
+        Node source = null;
+        for (Node node : nodes) { // Je parcours les noeuds pour trouver ma source
+            if (node.getName().equals(sourceName)) {
+                source = node;
+            }
+        }
+        return source;
     }
 
     /**

@@ -64,11 +64,11 @@
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Button layoutX="347.0" layoutY="337.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
-                <TableView layoutX="643.0" layoutY="23.0" prefHeight="353.0" prefWidth="563.0">
+                <Button fx:id="search" layoutX="347.0" layoutY="337.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
+                <TableView fx:id="itineraryTable" layoutX="643.0" layoutY="23.0" prefHeight="353.0" prefWidth="563.0">
                     <columns>
-                        <TableColumn prefWidth="276.0" text="Stations" />
-                        <TableColumn prefWidth="233.0" text="Lignes" />
+                        <TableColumn fx:id="nameCol" prefWidth="276.0" text="Stations" />
+                        <TableColumn fx:id="linesCol" prefWidth="233.0" text="Lignes" />
                     </columns>
                 </TableView>
             </children>
