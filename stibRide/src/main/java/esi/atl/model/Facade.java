@@ -17,7 +17,6 @@ public class Facade implements Model {
 
     private final PropertyChangeSupport pcs;
 
-    // public static String FULL_STATION = "STATIONS";
     public static String SHORT_PATH = "SHORTEST_PATH";
 
     private final StationRepository repo;
@@ -27,7 +26,7 @@ public class Facade implements Model {
     public Facade() throws RepositoryException {
         this.pcs = new PropertyChangeSupport(this);
         this.repo = new StationRepository();
-        getFullStation(); // FIRE or no ?
+        getFullStation();
     }
 
     @Override
@@ -37,7 +36,7 @@ public class Facade implements Model {
             String station = dto.getName();
             nameStation.add(station);
         }
-        return nameStation;
+        return nameStation; // Replace by FIRE ?
     }
 
     private void getFullStation() throws RepositoryException {
@@ -53,7 +52,6 @@ public class Facade implements Model {
                 }
             }
         }
-        //pcs.firePropertyChange(FULL_STATION, null, stations); BIEN DE FAIRE CA ?
     }
 
     private void getStibDatas(List<Node> path, Node destination) {
@@ -77,21 +75,26 @@ public class Facade implements Model {
         pcs.firePropertyChange(SHORT_PATH, null, datas);
     }
 
+    private Node getNode(Graph graph, String nameStation) {
+        for (Node node : graph.getNodes()) {
+            if (node.getName().equals(nameStation)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void calculateItinerary(String nameOrigin, String nameDest) throws RepositoryException {
         Graph graph = new Graph();
-        Node source = fillGraph(graph, stations, nameOrigin);
+        fillGraph(graph, stations);
+        Node source = getNode(graph, nameOrigin);
         graph = Dijkstra.calculateShortestPathFromSource(graph, source);
-        Node destination = null;
-        for (Node node : graph.getNodes()) { // Parcours mes noeuds pour trouver le noeud de destination.
-            if (node.getName().equals(nameDest)) {
-                destination = node;
-            }
-        }
+        Node destination = getNode(graph, nameDest);
         getStibDatas(destination.getShortestPath(), destination);
     }
 
-    private Node fillGraph(Graph graph, List<StationDto> stations, String sourceName) {
+    private void fillGraph(Graph graph, List<StationDto> stations) {
         List<Node> nodes = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {
             nodes.add(new Node(stations.get(i).getName()));
@@ -127,13 +130,6 @@ public class Facade implements Model {
         }
 
         graph.getNodes().addAll(nodes);
-        Node source = null;
-        for (Node node : nodes) { // Je parcours les noeuds pour trouver ma source
-            if (node.getName().equals(sourceName)) {
-                source = node;
-            }
-        }
-        return source;
     }
 
     /**

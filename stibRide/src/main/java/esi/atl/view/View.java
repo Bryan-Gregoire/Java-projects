@@ -64,7 +64,10 @@ public class View {
 
     public void setLblNbStationText(String text) {
         this.lblNbStation.setText(text);
+    }
 
+    public int getNbStation() {
+        return itineraryData.size();
     }
 
     public void addIteneraryData(List<StationData> data) {

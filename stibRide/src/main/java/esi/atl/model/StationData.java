@@ -23,5 +23,5 @@ public class StationData {
     public List getLines() {
         return lines;
     }
-        
+
 }

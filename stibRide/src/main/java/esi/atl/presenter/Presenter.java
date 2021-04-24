@@ -31,7 +31,7 @@ public class Presenter implements PropertyChangeListener {
         view.fillSearchableComboBox(stations);
         view.addSearchHandler(this);
     }
-    
+
     public void getItinerary() throws RepositoryException {
         String origin = view.getOrigin();
         String destination = view.getDestination();
@@ -40,8 +40,10 @@ public class Presenter implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName().equals(Facade.SHORT_PATH)) {
+        if (evt.getPropertyName().equals(Facade.SHORT_PATH)) {
             view.addIteneraryData((List<StationData>) evt.getNewValue());
+            view.setLblStatusText("Recherche terminée");
+            view.setLblNbStationText("Nombre de stations : " + view.getNbStation());
         }
     }
 
