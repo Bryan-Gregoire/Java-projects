@@ -6,13 +6,17 @@ import esi.atl.presenter.Presenter;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCombination;
 import org.controlsfx.control.SearchableComboBox;
 
 /**
@@ -20,6 +24,9 @@ import org.controlsfx.control.SearchableComboBox;
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
 public class View {
+
+    @FXML
+    private MenuItem quitItem;
 
     @FXML
     private Label lblStatus;
@@ -44,37 +51,38 @@ public class View {
 
     @FXML
     private TableColumn<StationData, List<Node>> linesCol;
-    
+
     @FXML
     private TableView favTable;
-    
+
     @FXML
     private TableColumn favCol;
-    
+
     @FXML
     private TableColumn originCol;
-    
+
     @FXML
     private TableColumn destCol;
-    
+
     @FXML
     private TextField favText;
-    
+
     @FXML
     private Button add;
-    
+
     @FXML
     private Button update;
-    
+
     @FXML
     private Button delete;
-    
+
     @FXML
     private Label emptyStation;
 
     private ObservableList<StationData> itineraryData;
 
     public void initialize() {
+        initMenu();
         initTableView();
     }
 
@@ -93,11 +101,11 @@ public class View {
     public void setLblNbStationText(String text) {
         this.lblNbStation.setText(text);
     }
-    
+
     public void hideEmptyLbl() {
         this.emptyStation.setVisible(false);
     }
-    
+
     public void showEmptyLbl() {
         this.emptyStation.setVisible(true);
     }
@@ -109,6 +117,16 @@ public class View {
     public void addIteneraryData(List<StationData> data) {
         itineraryData.clear();
         itineraryData.addAll(data);
+    }
+
+    public void initMenu() {
+        quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
+        quitItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
     }
 
     public void addSearchHandler(Presenter presenter) {
