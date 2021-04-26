@@ -1,5 +1,6 @@
 package esi.atl.view;
 
+import esi.atl.dto.FavoriteDto;
 import esi.atl.model.Node;
 import esi.atl.model.StationData;
 import esi.atl.presenter.Presenter;
@@ -56,13 +57,13 @@ public class View {
     private TableView favTable;
 
     @FXML
-    private TableColumn favCol;
+    private TableColumn<FavoriteDto, String> favCol;
 
     @FXML
-    private TableColumn originCol;
+    private TableColumn<FavoriteDto, String> originCol;
 
     @FXML
-    private TableColumn destCol;
+    private TableColumn<FavoriteDto, String> destCol;
 
     @FXML
     private TextField favText;
@@ -79,11 +80,12 @@ public class View {
     @FXML
     private Label emptyStation;
 
-    private ObservableList<StationData> itineraryData;
+    private ObservableList<StationData> itineraryDatas;
+    private ObservableList<FavoriteDto> favoritesDates;
 
     public void initialize() {
         initMenu();
-        initTableView();
+        initStationTableView();
     }
 
     public String getOrigin() {
@@ -111,12 +113,12 @@ public class View {
     }
 
     public int getNbStation() {
-        return itineraryData.size();
+        return itineraryDatas.size();
     }
 
     public void addIteneraryData(List<StationData> data) {
-        itineraryData.clear();
-        itineraryData.addAll(data);
+        itineraryDatas.clear();
+        itineraryDatas.addAll(data);
     }
 
     public void initMenu() {
@@ -141,12 +143,18 @@ public class View {
         destination.setValue(dtos.get(dtos.size() - 1));
     }
 
-    public void initTableView() {
+    public void initStationTableView() {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         linesCol.setCellValueFactory(new PropertyValueFactory<>("lines"));
 
-        itineraryData = FXCollections.observableArrayList();
-        itineraryTable.setItems(itineraryData);
+        itineraryDatas = FXCollections.observableArrayList();
+        itineraryTable.setItems(itineraryDatas);
+    }
+
+    public void initFavoriteTableView() {
+        favCol.setCellValueFactory(new PropertyValueFactory<>("key"));
+        originCol.setCellValueFactory(new PropertyValueFactory<>("origin"));
+        destCol.setCellValueFactory(new PropertyValueFactory<>("destination"));
     }
 
 }

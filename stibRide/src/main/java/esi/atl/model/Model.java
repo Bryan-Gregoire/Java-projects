@@ -1,5 +1,6 @@
 package esi.atl.model;
 
+import esi.atl.dto.FavoriteDto;
 import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
 import java.util.List;
@@ -13,5 +14,7 @@ public interface Model {
     public List<StationDto> getAllStationsName() throws RepositoryException;
 
     public void calculateItinerary(String nameOrigin, String nameDestination) throws RepositoryException;
+
+    public List<FavoriteDto> getAllFavorites() throws RepositoryException;
 
 }

@@ -1,8 +1,10 @@
 package esi.atl.model;
 
+import esi.atl.dto.FavoriteDto;
 import esi.atl.dto.StationDto;
 import esi.atl.dto.StopDto;
 import esi.atl.exception.RepositoryException;
+import esi.atl.repository.FavoriteRepository;
 import esi.atl.repository.StationRepository;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -19,13 +21,15 @@ public class Facade implements Model {
 
     public static String SHORT_PATH = "SHORTEST_PATH";
 
-    private final StationRepository repo;
+    private final StationRepository stationRepo;
+    private final FavoriteRepository favRepo;
 
     private List<StationDto> stations;
 
     public Facade() throws RepositoryException {
         this.pcs = new PropertyChangeSupport(this);
-        this.repo = new StationRepository();
+        this.stationRepo = new StationRepository();
+        this.favRepo = new FavoriteRepository();
         getFullStation();
     }
 
@@ -39,9 +43,14 @@ public class Facade implements Model {
         return nameStation; // Replace by FIRE ?
     }
 
+    public List<FavoriteDto> getAllFavorites() throws RepositoryException {
+        List<FavoriteDto> favorites = favRepo.getAll();
+        return favorites;
+    }
+
     private void getFullStation() throws RepositoryException {
-        stations = repo.getAll();
-        List<StopDto> stops = repo.getAllStops();
+        stations = stationRepo.getAll();
+        List<StopDto> stops = stationRepo.getAllStops();
 
         for (int i = 0; i < stations.size(); i++) {
             StationDto stt = stations.get(i);

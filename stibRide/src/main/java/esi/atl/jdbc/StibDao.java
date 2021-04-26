@@ -28,13 +28,6 @@ public class StibDao implements Dao<Integer, StationDto> {
         return StibDaoHolder.getInstance();
     }
 
-    /*
-        - une méthode qui retourne une liste des numéro de lignes.
-        - une méthode qui retourne une liste stationDTO (juste les identifiants 
-            de la station?) pour une ligne donnée dans l'ordre.
-    */
-    
-    
     @Override
     public List<StationDto> selectAll() throws RepositoryException {
         String sql = "SELECT id, name  FROM STATIONS order by id";
@@ -82,8 +75,7 @@ public class StibDao implements Dao<Integer, StationDto> {
         return dto;
     }
 
-    public List<StopDto> getFullStop()
-            throws RepositoryException {
+    public List<StopDto> getFullStop() throws RepositoryException {
 
         String sql = "SELECT id_line, id_station, id_order from STOPS "
                 + "order by id_station";
