@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.controlsfx.control.SearchableComboBox;
 
@@ -43,6 +44,33 @@ public class View {
 
     @FXML
     private TableColumn<StationData, List<Node>> linesCol;
+    
+    @FXML
+    private TableView favTable;
+    
+    @FXML
+    private TableColumn favCol;
+    
+    @FXML
+    private TableColumn originCol;
+    
+    @FXML
+    private TableColumn destCol;
+    
+    @FXML
+    private TextField favText;
+    
+    @FXML
+    private Button add;
+    
+    @FXML
+    private Button update;
+    
+    @FXML
+    private Button delete;
+    
+    @FXML
+    private Label emptyStation;
 
     private ObservableList<StationData> itineraryData;
 
@@ -64,6 +92,14 @@ public class View {
 
     public void setLblNbStationText(String text) {
         this.lblNbStation.setText(text);
+    }
+    
+    public void hideEmptyLbl() {
+        this.emptyStation.setVisible(false);
+    }
+    
+    public void showEmptyLbl() {
+        this.emptyStation.setVisible(true);
     }
 
     public int getNbStation() {

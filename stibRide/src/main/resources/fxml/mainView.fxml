@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,32 +46,44 @@
                 </ImageView>
             </content>
         </ScrollPane>
-        <AnchorPane prefHeight="414.0" prefWidth="1446.0">
+        <AnchorPane prefHeight="390.0" prefWidth="1330.0">
             <children>
-                <ImageView fitHeight="118.0" fitWidth="82.0" layoutX="343.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="118.0" fitWidth="82.0" layoutX="123.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../image/logo.png" />
                     </image>
                 </ImageView>
-                <SearchableComboBox fx:id="origin" layoutX="297.0" layoutY="209.0" />
-                <Label layoutX="350.0" layoutY="174.0" prefHeight="25.0" prefWidth="90.0" text="Origine : " underline="true">
+                <SearchableComboBox fx:id="origin" layoutX="72.0" layoutY="175.0" />
+                <Label layoutX="130.0" layoutY="145.0" prefHeight="25.0" prefWidth="68.0" text="Origine : " underline="true">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <SearchableComboBox fx:id="destination" layoutX="297.0" layoutY="293.0" />
-                <Label layoutX="349.0" layoutY="255.0" text="Destination : " underline="true">
+                <SearchableComboBox fx:id="destination" layoutX="73.0" layoutY="246.0" />
+                <Label layoutX="119.0" layoutY="213.0" text="Destination : " underline="true">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Button fx:id="search" layoutX="347.0" layoutY="337.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
-                <TableView fx:id="itineraryTable" layoutX="643.0" layoutY="23.0" prefHeight="353.0" prefWidth="563.0">
+                <Button fx:id="search" layoutX="122.0" layoutY="286.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Search" />
+                <TableView fx:id="itineraryTable" layoutX="716.0" layoutY="34.0" prefHeight="307.0" prefWidth="556.0">
                     <columns>
                         <TableColumn fx:id="nameCol" prefWidth="276.0" text="Stations" />
                         <TableColumn fx:id="linesCol" prefWidth="233.0" text="Lignes" />
                     </columns>
                 </TableView>
+            <TableView fx:id="favTable" layoutX="309.0" layoutY="54.0" prefHeight="257.0" prefWidth="372.0">
+              <columns>
+                <TableColumn fx:id="favCol" prefWidth="131.0" text="Favorite" />
+                <TableColumn fx:id="originCol" prefWidth="124.0" text="Origine" />
+                  <TableColumn fx:id="destCol" prefWidth="116.0" text="Destination" />
+              </columns>
+            </TableView>
+            <TextField fx:id="favText" layoutX="309.0" layoutY="325.0" />
+            <Button fx:id="add" layoutX="476.0" layoutY="325.0" mnemonicParsing="false" text="Add" />
+            <Button fx:id="update" layoutX="525.0" layoutY="325.0" mnemonicParsing="false" text="Update" />
+            <Button fx:id="delete" layoutX="594.0" layoutY="325.0" mnemonicParsing="false" text="Delete" />
+            <Label fx:id="emptyStation" layoutX="46.0" layoutY="329.0" prefHeight="17.0" prefWidth="228.0" text="Entrer une station origine et destination !" textFill="#ff0202" />
             </children>
         </AnchorPane>
         <AnchorPane prefHeight="61.0" prefWidth="1333.0">

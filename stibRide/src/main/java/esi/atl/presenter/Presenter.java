@@ -30,12 +30,18 @@ public class Presenter implements PropertyChangeListener {
         List stations = model.getAllStationsName();
         view.fillSearchableComboBox(stations);
         view.addSearchHandler(this);
+        view.hideEmptyLbl();
     }
 
     public void getItinerary() throws RepositoryException {
-        String origin = view.getOrigin();
-        String destination = view.getDestination();
-        model.calculateItinerary(origin, destination);
+        view.hideEmptyLbl();
+        try {
+            String origin = view.getOrigin();
+            String destination = view.getDestination();
+            model.calculateItinerary(origin, destination);
+        } catch (Exception e) {
+            view.showEmptyLbl();
+        }
     }
 
     @Override
