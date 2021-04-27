@@ -1,7 +1,6 @@
 package esi.atl.jdbc;
 
 import esi.atl.dto.FavoriteDto;
-import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.repository.Dao;
 import java.sql.Connection;
@@ -30,7 +29,7 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
 
     @Override
     public List<FavoriteDto> selectAll() throws RepositoryException {
-        String sql = "SELECT name, origin, destination FROM FAVORITE";
+        String sql = "SELECT name, origin, destination FROM FAVORIS";
 
         List<FavoriteDto> listDtos = new ArrayList<>();
 
@@ -54,7 +53,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
             throw new RepositoryException("No key in parameter");
         }
 
-        String sql = "SELECT name, origin, destination FROM FAVORITE WHERE name = ?";
+        String sql = "SELECT name, origin, destination FROM FAVORIS"
+                + " WHERE name = ?";
         FavoriteDto dto = null;
 
         try ( PreparedStatement pstmt = connexion.prepareStatement(sql)) {
@@ -63,7 +63,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
 
             int count = 0;
             while (rs.next()) {
-                dto = new FavoriteDto(rs.getString(1), rs.getString(2), rs.getString(3));
+                dto = new FavoriteDto(rs.getString("name"),
+                        rs.getString("origin"), rs.getString("destination"));
                 count++;
             }
             if (count > 1) {
@@ -76,26 +77,26 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
     }
 
     public void insert(FavoriteDto dto) throws RepositoryException {
-        if (dto == null || select(dto.getKey()) != null) {
+        if (dto == null) {
             throw new RepositoryException("Parameter is invalid");
         }
-
+        String id = "";
         String sql = "INSERT INTO FAVORIS(name,origin,destination) VALUES(?,"
                 + dto.getOrigin() + ", " + dto.getDestination() + ")";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
             psmt.setString(1, dto.getKey());
+            psmt.executeUpdate();
 
-            int count = psmt.executeUpdate();
-
-            ResultSet result = psmt.getGeneratedKeys();
-            while (result.next()) {
-                String name = result.getString(1);
-                System.out.println("Clé ajoutés : " + name);
-            }
+//            ResultSet result = psmt.getGeneratedKeys();
+//            while (result.next()) {
+//                id = result.getString(1);
+//                System.out.println("Clé ajoutés : " + id);
+//            }
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
+        //return id;
     }
 
     public void update(FavoriteDto dto) throws RepositoryException {

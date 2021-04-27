@@ -17,4 +17,9 @@ public interface Model {
 
     public List<FavoriteDto> getAllFavorites() throws RepositoryException;
 
+    public void insertFavorite(FavoriteDto dto) throws RepositoryException;
+
+    public void deleteFavorite(String key) throws RepositoryException;
+
+
 }

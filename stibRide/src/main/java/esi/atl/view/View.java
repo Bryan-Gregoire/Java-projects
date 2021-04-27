@@ -80,12 +80,43 @@ public class View {
     @FXML
     private Label emptyStation;
 
+    @FXML
+    private Label emptyFavText;
+
     private ObservableList<StationData> itineraryDatas;
-    private ObservableList<FavoriteDto> favoritesDates;
+    private ObservableList<FavoriteDto> favoritesDatas;
 
     public void initialize() {
         initMenu();
         initStationTableView();
+        initFavoriteTableView();
+    }
+
+    public void initMenu() {
+        quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
+        quitItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+    }
+
+    public void initStationTableView() {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        linesCol.setCellValueFactory(new PropertyValueFactory<>("lines"));
+
+        itineraryDatas = FXCollections.observableArrayList();
+        itineraryTable.setItems(itineraryDatas);
+    }
+
+    public void initFavoriteTableView() {
+        favCol.setCellValueFactory(new PropertyValueFactory<>("key"));
+        originCol.setCellValueFactory(new PropertyValueFactory<>("origin"));
+        destCol.setCellValueFactory(new PropertyValueFactory<>("destination"));
+
+        favoritesDatas = FXCollections.observableArrayList();
+        favTable.setItems(favoritesDatas);
     }
 
     public String getOrigin() {
@@ -104,11 +135,11 @@ public class View {
         this.lblNbStation.setText(text);
     }
 
-    public void hideEmptyLbl() {
+    public void hideEmptyStationLbl() {
         this.emptyStation.setVisible(false);
     }
 
-    public void showEmptyLbl() {
+    public void showEmptyStationLbl() {
         this.emptyStation.setVisible(true);
     }
 
@@ -121,21 +152,6 @@ public class View {
         itineraryDatas.addAll(data);
     }
 
-    public void initMenu() {
-        quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
-        quitItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                System.exit(0);
-            }
-        });
-    }
-
-    public void addSearchHandler(Presenter presenter) {
-        SearchHandler handler = new SearchHandler(presenter);
-        search.setOnAction(handler);
-    }
-
     public void fillSearchableComboBox(List dtos) {
         origin.getItems().addAll(dtos);
         destination.getItems().addAll(dtos);
@@ -143,18 +159,51 @@ public class View {
         destination.setValue(dtos.get(dtos.size() - 1));
     }
 
-    public void initStationTableView() {
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        linesCol.setCellValueFactory(new PropertyValueFactory<>("lines"));
-
-        itineraryDatas = FXCollections.observableArrayList();
-        itineraryTable.setItems(itineraryDatas);
+    public String getFavText() {
+        return this.favText.getText();
     }
 
-    public void initFavoriteTableView() {
-        favCol.setCellValueFactory(new PropertyValueFactory<>("key"));
-        originCol.setCellValueFactory(new PropertyValueFactory<>("origin"));
-        destCol.setCellValueFactory(new PropertyValueFactory<>("destination"));
+    public boolean isFavTextEmpty() {
+        return this.favText.getText().isEmpty();
     }
 
+    public void hideEmptyFavLbl() {
+        this.emptyFavText.setVisible(false);
+    }
+
+    public void showEmptyFavLbl() {
+        this.emptyFavText.setVisible(true);
+    }
+
+    public void addSearchHandler(Presenter presenter) {
+        SearchHandler handler = new SearchHandler(presenter);
+        search.setOnAction(handler);
+    }
+
+    public void addInsertHandler(Presenter presenter) {
+        InsertHandler handler = new InsertHandler(presenter);
+        add.setOnAction(handler);
+        update.setOnAction(handler);
+    }
+
+    public void addDeleteHandler(Presenter presenter) {
+        DeleteHandler handler = new DeleteHandler(presenter);
+        delete.setOnAction(handler);
+    }
+
+    public ObservableList<FavoriteDto> getAllFavorites() {
+        return this.favoritesDatas;
+    }
+
+    public void addFavToTable(FavoriteDto dto) {
+        this.favoritesDatas.add(dto);
+    }
+
+    public void removeFavFromTable(FavoriteDto dto) {
+        this.favoritesDatas.remove(dto);
+    }
+
+//    public boolean containFav(FavoriteDto fav) {
+//        return this.favoritesDatas.contains(fav);
+//    }
 }

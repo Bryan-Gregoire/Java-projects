@@ -43,6 +43,17 @@ public class Facade implements Model {
         return nameStation; // Replace by FIRE ?
     }
 
+    @Override
+    public void insertFavorite(FavoriteDto dto) throws RepositoryException {
+        favRepo.add(dto);
+    }
+
+    @Override
+    public void deleteFavorite(String key) throws RepositoryException {
+        favRepo.remove(key);
+    }
+
+    @Override
     public List<FavoriteDto> getAllFavorites() throws RepositoryException {
         List<FavoriteDto> favorites = favRepo.getAll();
         return favorites;

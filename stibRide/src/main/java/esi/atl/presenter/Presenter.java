@@ -1,5 +1,6 @@
 package esi.atl.presenter;
 
+import esi.atl.dto.FavoriteDto;
 import esi.atl.exception.RepositoryException;
 import esi.atl.model.Facade;
 import esi.atl.model.Model;
@@ -30,18 +31,57 @@ public class Presenter implements PropertyChangeListener {
         List stations = model.getAllStationsName();
         view.fillSearchableComboBox(stations);
         view.addSearchHandler(this);
-        view.hideEmptyLbl();
+        view.addInsertHandler(this);
+        view.addDeleteHandler(this);
     }
 
     public void getItinerary() throws RepositoryException {
-        view.hideEmptyLbl();
+        view.hideEmptyStationLbl();
         try {
             String origin = view.getOrigin();
             String destination = view.getDestination();
             model.calculateItinerary(origin, destination);
         } catch (Exception e) {
-            view.showEmptyLbl();
+            view.showEmptyStationLbl();
         }
+    }
+
+    public void insertUpdateFav() throws RepositoryException {
+        if (view.isFavTextEmpty()) {
+            view.showEmptyFavLbl();
+        } else {
+            String fav = view.getFavText();
+            String origin = view.getOrigin();
+            String destination = view.getDestination();
+            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
+            model.insertFavorite(dto);
+            view.addFavToTable(dto);
+//          if (view.containFav(dto)) { ... }
+            view.showEmptyFavLbl();
+        }
+    }
+
+    public void deleteFavorite() throws RepositoryException {
+        if (view.isFavTextEmpty()) {
+            view.showEmptyFavLbl();
+        } else {
+            String key = view.getFavText();
+            model.deleteFavorite(key);
+            FavoriteDto fav = getFav(key);//Pour voir si j'ai supp quelque chose. (je pourrait simplifier ca dans le DAO en retournant le nombre de modification)
+            if (fav != null) {
+                view.removeFavFromTable(fav);
+            }
+            view.showEmptyFavLbl();
+        }
+    }
+
+    public FavoriteDto getFav(String key) {
+        for (FavoriteDto favorite : view.getAllFavorites()) {
+            if (favorite.getKey().equals(key)) {
+                return favorite;
+            }
+        }
+        return null;
     }
 
     @Override
