@@ -33,6 +33,8 @@ public class Presenter implements PropertyChangeListener {
         view.addSearchHandler(this);
         view.addInsertHandler(this);
         view.addDeleteHandler(this);
+        List<FavoriteDto> favorites = model.getAllFavorites();
+        view.addAllFavToTable(favorites);
     }
 
     public void getItinerary() throws RepositoryException {
@@ -55,9 +57,19 @@ public class Presenter implements PropertyChangeListener {
             String destination = view.getDestination();
             FavoriteDto dto = new FavoriteDto(fav, origin, destination);
             model.insertFavorite(dto);
-            view.addFavToTable(dto);
-//          if (view.containFav(dto)) { ... }
-            view.showEmptyFavLbl();
+            if (!view.containFav(dto)) { //Si il existe deja
+                view.addFavToTable(dto);
+            } else {
+                // je fait un update
+                for (FavoriteDto favoritesData : view.getAllFavorites()) {
+                    if (favoritesData.getKey().equals(dto.getKey())) {
+                        favoritesData.setOrigin(dto.getOrigin());
+                        favoritesData.setDestination(dto.getDestination());
+                        break;
+                    }
+                }
+            }
+            view.hideEmptyFavLbl();
         }
     }
 
@@ -71,7 +83,7 @@ public class Presenter implements PropertyChangeListener {
             if (fav != null) {
                 view.removeFavFromTable(fav);
             }
-            view.showEmptyFavLbl();
+            view.hideEmptyFavLbl();
         }
     }
 

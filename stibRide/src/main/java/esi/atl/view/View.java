@@ -195,8 +195,16 @@ public class View {
         return this.favoritesDatas;
     }
 
+    public void addAllFavToTable(List<FavoriteDto> favorites) {
+        this.favoritesDatas.addAll(favorites);
+    }
+
     public void addFavToTable(FavoriteDto dto) {
         this.favoritesDatas.add(dto);
+    }
+    
+    public boolean containFav(FavoriteDto dto) {
+        return this.favoritesDatas.contains(dto);
     }
 
     public void removeFavFromTable(FavoriteDto dto) {

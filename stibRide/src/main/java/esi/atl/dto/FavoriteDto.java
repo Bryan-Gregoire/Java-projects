@@ -6,8 +6,8 @@ package esi.atl.dto;
  */
 public class FavoriteDto extends Dto<String> {
 
-    private final String origin;
-    private final String destination;
+    private  String origin;
+    private  String destination;
 
     public FavoriteDto(String key, String origin, String destination) {
         super(key);
@@ -22,5 +22,15 @@ public class FavoriteDto extends Dto<String> {
     public String getDestination() {
         return destination;
     }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+    
+    
 
 }

@@ -81,11 +81,12 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
             throw new RepositoryException("Parameter is invalid");
         }
         String id = "";
-        String sql = "INSERT INTO FAVORIS(name,origin,destination) VALUES(?,"
-                + dto.getOrigin() + ", " + dto.getDestination() + ")";
+        String sql = "INSERT INTO FAVORIS(name,origin,destination) VALUES(?,?,?)";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
             psmt.setString(1, dto.getKey());
+            psmt.setString(2, dto.getOrigin());
+            psmt.setString(3, dto.getDestination());
             psmt.executeUpdate();
 
 //            ResultSet result = psmt.getGeneratedKeys();
@@ -104,11 +105,12 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
             throw new RepositoryException("Parameter is null");
         }
 
-        String sql = "UPDATE FAVORIS SET origin=" + dto.getOrigin()
-                + ", destination=" + dto.getDestination() + " WHERE name=?";
+        String sql = "UPDATE FAVORIS SET origin=?, destination=? WHERE name=?";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
-            psmt.setString(1, dto.getKey());
+            psmt.setString(1, dto.getOrigin());
+            psmt.setString(2, dto.getDestination());
+            psmt.setString(3, dto.getKey());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
