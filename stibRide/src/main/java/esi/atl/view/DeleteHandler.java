@@ -19,11 +19,11 @@ public class DeleteHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent t) {
-        try {
-            presenter.deleteFavorite();
-        } catch (RepositoryException ex) {
-            System.out.println("Repository error " + ex.getMessage());
-        }
+//        try {
+//             presenter.deleteFavorite();
+//        } catch (RepositoryException ex) {
+//            System.out.println("Repository error " + ex.getMessage());
+//        }
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class FavoriteRepository implements Repository<String, FavoriteDto> {
+public class FavoriteRepository implements Repository<Integer, FavoriteDto> {
 
     private FavoriteDao dao;
 
@@ -27,25 +27,24 @@ public class FavoriteRepository implements Repository<String, FavoriteDto> {
     }
 
     @Override
-    public FavoriteDto get(String key) throws RepositoryException {
+    public FavoriteDto get(Integer key) throws RepositoryException {
         FavoriteDto dto = dao.select(key);
         return dto;
     }
 
     @Override
-    public String add(FavoriteDto dto) throws RepositoryException {
-        String key = dto.getKey();
+    public Integer add(FavoriteDto dto) throws RepositoryException {
+        Integer key = dto.getKey();
         if (contains(key)) {
             dao.update(dto);
         } else {
-            dao.insert(dto);
+            return dao.insert(dto);
         }
-
-        return null; // TODO
+        return -1;
     }
 
     @Override
-    public void remove(String key) throws RepositoryException {
+    public void remove(Integer key) throws RepositoryException {
         dao.delete(key);
     }
 
@@ -54,7 +53,7 @@ public class FavoriteRepository implements Repository<String, FavoriteDto> {
     }
 
     @Override
-    public boolean contains(String key) throws RepositoryException {
+    public boolean contains(Integer key) throws RepositoryException {
         FavoriteDto dto = dao.select(key);
         return dto != null;
     }

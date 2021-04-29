@@ -159,7 +159,7 @@ public class View {
         destination.setValue(dtos.get(dtos.size() - 1));
     }
 
-    public String getFavText() {
+    public String getFavTextField() {
         return this.favText.getText();
     }
 

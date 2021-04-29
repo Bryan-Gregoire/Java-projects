@@ -19,10 +19,10 @@ public class InsertHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent t) {
-        try {
-            presenter.insertUpdateFav();
-        } catch (RepositoryException ex) {
-            System.out.println("Repository error " + ex.getMessage());
-        }
+//        try {
+//            presenter.insertUpdateFav();
+//        } catch (RepositoryException ex) {
+//            System.out.println("Repository error " + ex.getMessage());
+//        }
     }
 }

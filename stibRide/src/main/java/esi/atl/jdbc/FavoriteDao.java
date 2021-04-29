@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class FavoriteDao implements Dao<String, FavoriteDto> {
+public class FavoriteDao implements Dao<Integer, FavoriteDto> {
 
     private Connection connexion;
 
@@ -29,7 +29,7 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
 
     @Override
     public List<FavoriteDto> selectAll() throws RepositoryException {
-        String sql = "SELECT name, origin, destination FROM FAVORIS";
+        String sql = "SELECT id,name, origin, destination FROM FAVORIS";
 
         List<FavoriteDto> listDtos = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
                 = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                FavoriteDto dto = new FavoriteDto(rs.getString("name"),
+                FavoriteDto dto = new FavoriteDto(rs.getInt("id"), rs.getString("name"),
                         rs.getString("origin"), rs.getString("destination"));
                 listDtos.add(dto);
             }
@@ -48,22 +48,22 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
     }
 
     @Override
-    public FavoriteDto select(String key) throws RepositoryException {
+    public FavoriteDto select(Integer key) throws RepositoryException {
         if (key == null) {
             throw new RepositoryException("No key in parameter");
         }
 
-        String sql = "SELECT name, origin, destination FROM FAVORIS"
-                + " WHERE name = ?";
+        String sql = "SELECT id, name, origin, destination FROM FAVORIS"
+                + " WHERE id = ?";
         FavoriteDto dto = null;
 
         try ( PreparedStatement pstmt = connexion.prepareStatement(sql)) {
-            pstmt.setString(1, key);
+            pstmt.setInt(1, key);
             ResultSet rs = pstmt.executeQuery();
 
             int count = 0;
             while (rs.next()) {
-                dto = new FavoriteDto(rs.getString("name"),
+                dto = new FavoriteDto(rs.getInt("id"), rs.getString("name"),
                         rs.getString("origin"), rs.getString("destination"));
                 count++;
             }
@@ -77,66 +77,64 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
     }
 
     @Override
-    public String insert(FavoriteDto dto) throws RepositoryException {
+    public Integer insert(FavoriteDto dto) throws RepositoryException {
         if (dto == null) {
             throw new RepositoryException("Parameter is invalid");
         }
-        String id = "";
+        Integer id = -1;
         String sql = "INSERT INTO FAVORIS(name,origin,destination) VALUES(?,?,?)";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
-            psmt.setString(1, dto.getKey());
+            psmt.setString(1, dto.getName());
             psmt.setString(2, dto.getOrigin());
             psmt.setString(3, dto.getDestination());
             psmt.executeUpdate();
 
-//            ResultSet result = psmt.getGeneratedKeys();
-//            while (result.next()) {
-//                id = result.getString(1);
-//                System.out.println("Clé ajoutés : " + id);
-//            }
+            ResultSet result = psmt.getGeneratedKeys();
+            while (result.next()) {
+                id = result.getInt(1);
+            }
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
-        //return id;
-
-        return null; //TODO
+        return id;
     }
 
+    @Override
     public void update(FavoriteDto dto) throws RepositoryException {
         if (dto == null) {
             throw new RepositoryException("Parameter is null");
         }
 
-        String sql = "UPDATE FAVORIS SET origin=?, destination=? WHERE name=?";
+        String sql = "UPDATE FAVORIS SET name=?, origin=?, destination=? "
+                + "WHERE id=?";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
-            psmt.setString(1, dto.getOrigin());
-            psmt.setString(2, dto.getDestination());
-            psmt.setString(3, dto.getKey());
+            psmt.setString(1, dto.getName());
+            psmt.setString(2, dto.getOrigin());
+            psmt.setString(3, dto.getDestination());
+            psmt.setInt(4, dto.getKey());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
-        //TODO
     }
 
     @Override
-    public void delete(String key) throws RepositoryException {
+    public void delete(Integer key) throws RepositoryException {
         if (key == null) {
             throw new RepositoryException("Parameter is null");
         }
 
-        String sql = "DELETE FROM FAVORIS WHERE name=?";
+        String sql = "DELETE FROM FAVORIS WHERE id=?";
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
-            psmt.setString(1, key);
+            psmt.setInt(1, key);
             psmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
-        // TODO
     }
 
     private static class FavoriteDaoHolder {

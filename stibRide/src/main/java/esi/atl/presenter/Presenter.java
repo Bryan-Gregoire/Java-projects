@@ -48,53 +48,53 @@ public class Presenter implements PropertyChangeListener {
         }
     }
 
-    public void insertUpdateFav() throws RepositoryException {
-        if (view.isFavTextEmpty()) {
-            view.showEmptyFavLbl();
-        } else {
-            String fav = view.getFavText();
-            String origin = view.getOrigin();
-            String destination = view.getDestination();
-            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
-            model.insertFavorite(dto);
-            if (!view.containFav(dto)) { //Si il existe deja
-                view.addFavToTable(dto);
-            } else {
-                // je fait un update
-                for (FavoriteDto favoritesData : view.getAllFavorites()) {
-                    if (favoritesData.getKey().equals(dto.getKey())) {
-                        favoritesData.setOrigin(dto.getOrigin());
-                        favoritesData.setDestination(dto.getDestination());
-                        break;
-                    }
-                }
-            }
-            view.hideEmptyFavLbl();
-        }
-    }
-
-    public void deleteFavorite() throws RepositoryException {
-        if (view.isFavTextEmpty()) {
-            view.showEmptyFavLbl();
-        } else {
-            String key = view.getFavText();
-            model.deleteFavorite(key);
-            FavoriteDto fav = getFav(key);//Pour voir si j'ai supp quelque chose. (je pourrait simplifier ca dans le DAO en retournant le nombre de modification)
-            if (fav != null) {
-                view.removeFavFromTable(fav);
-            }
-            view.hideEmptyFavLbl();
-        }
-    }
-
-    public FavoriteDto getFav(String key) {
-        for (FavoriteDto favorite : view.getAllFavorites()) {
-            if (favorite.getKey().equals(key)) {
-                return favorite;
-            }
-        }
-        return null;
-    }
+//    public void insertUpdateFav() throws RepositoryException {
+//        if (view.isFavTextEmpty()) {
+//            view.showEmptyFavLbl();
+//        } else {
+//            String fav = view.getFavTextField();
+//            String origin = view.getOrigin();
+//            String destination = view.getDestination();
+//            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
+//            model.insertFavorite(dto);
+//            if (!view.containFav(dto)) { //Si il existe deja
+//                view.addFavToTable(dto);
+//            } else {
+//                // je fait un update
+//                for (FavoriteDto favoritesData : view.getAllFavorites()) {
+//                    if (favoritesData.getKey().equals(dto.getKey())) {
+//                        favoritesData.setOrigin(dto.getOrigin());
+//                        favoritesData.setDestination(dto.getDestination());
+//                        break;
+//                    }
+//                }
+//            }
+//            view.hideEmptyFavLbl();
+//        }
+//    }
+//
+//    public void deleteFavorite() throws RepositoryException {
+//        if (view.isFavTextEmpty()) {
+//            view.showEmptyFavLbl();
+//        } else {
+//            String name = view.getFavTextField();
+//            model.deleteFavorite(key);
+//            FavoriteDto fav = getFav(key);//Pour voir si j'ai supp quelque chose. (je pourrait simplifier ca dans le DAO en retournant le nombre de modification)
+//            if (fav != null) {
+//                view.removeFavFromTable(fav);
+//            }
+//            view.hideEmptyFavLbl();
+//        }
+//    }
+//
+//    public FavoriteDto getFav(String key) {
+//        for (FavoriteDto favorite : view.getAllFavorites()) {
+//            if (favorite.getKey().equals(key)) {
+//                return favorite;
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

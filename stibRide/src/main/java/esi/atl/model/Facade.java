@@ -40,7 +40,7 @@ public class Facade implements Model {
             String station = dto.getName();
             nameStation.add(station);
         }
-        return nameStation; // Replace by FIRE ?
+        return nameStation;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Facade implements Model {
     }
 
     @Override
-    public void deleteFavorite(String key) throws RepositoryException {
+    public void deleteFavorite(Integer key) throws RepositoryException {
         favRepo.remove(key);
     }
 
