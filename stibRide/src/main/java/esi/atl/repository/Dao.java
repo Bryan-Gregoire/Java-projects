@@ -45,7 +45,6 @@ public interface Dao<K, T extends Dto<K>> {
      * its key.
      *
      * @param dto element to update.
-     * @return the element's key, usefull when the key is auto-generated.
      * @throws RepositoryException if the resource can't be accessed.
      */
     void update(T dto) throws RepositoryException;
@@ -54,7 +53,6 @@ public interface Dao<K, T extends Dto<K>> {
      * Deletes the item of the specific key from the resource.
      *
      * @param key key of the element to delete.
-     * @return the element's key, usefull when the key is auto-generated.
      * @throws RepositoryException if the resource can't be accessed.
      */
     void delete(K key) throws RepositoryException;

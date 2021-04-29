@@ -20,6 +20,9 @@ public class Facade implements Model {
     private final PropertyChangeSupport pcs;
 
     public static String SHORT_PATH = "SHORTEST_PATH";
+    public static String INSERT_FAV = "INSERT";
+    public static String DELETE_FAV = "DELETE";
+    public static String UPDATE_FAV = "UPDATE";
 
     private final StationRepository stationRepo;
     private final FavoriteRepository favRepo;
@@ -45,12 +48,21 @@ public class Facade implements Model {
 
     @Override
     public void insertFavorite(FavoriteDto dto) throws RepositoryException {
-        favRepo.add(dto);
+        int key = favRepo.add(dto);
+        dto.setKey(key);
+        pcs.firePropertyChange(INSERT_FAV, null, dto);
     }
 
     @Override
     public void deleteFavorite(Integer key) throws RepositoryException {
         favRepo.remove(key);
+        pcs.firePropertyChange(DELETE_FAV, null, key);
+    }
+
+    @Override
+    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto) throws RepositoryException {
+        favRepo.update(newDto);
+        pcs.firePropertyChange(UPDATE_FAV, oldDto, newDto);
     }
 
     @Override

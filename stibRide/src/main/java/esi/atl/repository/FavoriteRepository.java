@@ -34,13 +34,7 @@ public class FavoriteRepository implements Repository<Integer, FavoriteDto> {
 
     @Override
     public Integer add(FavoriteDto dto) throws RepositoryException {
-        Integer key = dto.getKey();
-        if (contains(key)) {
-            dao.update(dto);
-        } else {
-            return dao.insert(dto);
-        }
-        return -1;
+        return dao.insert(dto);
     }
 
     @Override

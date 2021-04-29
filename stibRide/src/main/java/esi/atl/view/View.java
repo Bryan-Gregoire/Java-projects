@@ -111,7 +111,7 @@ public class View {
     }
 
     public void initFavoriteTableView() {
-        favCol.setCellValueFactory(new PropertyValueFactory<>("key"));
+        favCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         originCol.setCellValueFactory(new PropertyValueFactory<>("origin"));
         destCol.setCellValueFactory(new PropertyValueFactory<>("destination"));
 
@@ -147,6 +147,11 @@ public class View {
         return itineraryDatas.size();
     }
 
+    public boolean selectedStationsIsEmpty() {
+        return this.origin.getValue() == null
+                || this.destination.getValue() == null;
+    }
+
     public void addIteneraryData(List<StationData> data) {
         itineraryDatas.clear();
         itineraryDatas.addAll(data);
@@ -161,6 +166,11 @@ public class View {
 
     public String getFavTextField() {
         return this.favText.getText();
+    }
+
+    public FavoriteDto getSelectedFav() {
+        return (FavoriteDto) this.favTable.getSelectionModel()
+                .getSelectedItem();
     }
 
     public boolean isFavTextEmpty() {
@@ -186,6 +196,11 @@ public class View {
         update.setOnAction(handler);
     }
 
+    public void addUpdateHandler(Presenter presenter) {
+        UpdateHandler handler = new UpdateHandler(presenter);
+        update.setOnAction(handler);
+    }
+
     public void addDeleteHandler(Presenter presenter) {
         DeleteHandler handler = new DeleteHandler(presenter);
         delete.setOnAction(handler);
@@ -202,16 +217,9 @@ public class View {
     public void addFavToTable(FavoriteDto dto) {
         this.favoritesDatas.add(dto);
     }
-    
-    public boolean containFav(FavoriteDto dto) {
-        return this.favoritesDatas.contains(dto);
-    }
 
     public void removeFavFromTable(FavoriteDto dto) {
         this.favoritesDatas.remove(dto);
     }
 
-//    public boolean containFav(FavoriteDto fav) {
-//        return this.favoritesDatas.contains(fav);
-//    }
 }

@@ -93,6 +93,7 @@ public class FavoriteDao implements Dao<Integer, FavoriteDto> {
             ResultSet result = psmt.getGeneratedKeys();
             while (result.next()) {
                 id = result.getInt(1);
+                System.out.println("Clé généré : " + id);
             }
         } catch (SQLException e) {
             throw new RepositoryException(e);
@@ -131,7 +132,6 @@ public class FavoriteDao implements Dao<Integer, FavoriteDto> {
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
             psmt.setInt(1, key);
             psmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }

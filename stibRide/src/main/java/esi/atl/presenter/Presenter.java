@@ -30,71 +30,66 @@ public class Presenter implements PropertyChangeListener {
     public void initialise() throws RepositoryException {
         List stations = model.getAllStationsName();
         view.fillSearchableComboBox(stations);
+        List<FavoriteDto> favorites = model.getAllFavorites();
+        view.addAllFavToTable(favorites);
         view.addSearchHandler(this);
         view.addInsertHandler(this);
         view.addDeleteHandler(this);
-        List<FavoriteDto> favorites = model.getAllFavorites();
-        view.addAllFavToTable(favorites);
+        view.addUpdateHandler(this);
     }
 
     public void getItinerary() throws RepositoryException {
-        view.hideEmptyStationLbl();
-        try {
+        if (view.selectedStationsIsEmpty()) {
+            view.showEmptyStationLbl();
+        } else {
+            view.hideEmptyStationLbl();
             String origin = view.getOrigin();
             String destination = view.getDestination();
             model.calculateItinerary(origin, destination);
-        } catch (Exception e) {
-            view.showEmptyStationLbl();
         }
     }
 
-//    public void insertUpdateFav() throws RepositoryException {
-//        if (view.isFavTextEmpty()) {
-//            view.showEmptyFavLbl();
-//        } else {
-//            String fav = view.getFavTextField();
-//            String origin = view.getOrigin();
-//            String destination = view.getDestination();
-//            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
-//            model.insertFavorite(dto);
-//            if (!view.containFav(dto)) { //Si il existe deja
-//                view.addFavToTable(dto);
-//            } else {
-//                // je fait un update
-//                for (FavoriteDto favoritesData : view.getAllFavorites()) {
-//                    if (favoritesData.getKey().equals(dto.getKey())) {
-//                        favoritesData.setOrigin(dto.getOrigin());
-//                        favoritesData.setDestination(dto.getDestination());
-//                        break;
-//                    }
-//                }
-//            }
-//            view.hideEmptyFavLbl();
-//        }
-//    }
-//
-//    public void deleteFavorite() throws RepositoryException {
-//        if (view.isFavTextEmpty()) {
-//            view.showEmptyFavLbl();
-//        } else {
-//            String name = view.getFavTextField();
-//            model.deleteFavorite(key);
-//            FavoriteDto fav = getFav(key);//Pour voir si j'ai supp quelque chose. (je pourrait simplifier ca dans le DAO en retournant le nombre de modification)
-//            if (fav != null) {
-//                view.removeFavFromTable(fav);
-//            }
-//            view.hideEmptyFavLbl();
-//        }
-//    }
-//
-//    public FavoriteDto getFav(String key) {
-//        for (FavoriteDto favorite : view.getAllFavorites()) {
-//            if (favorite.getKey().equals(key)) {
-//                return favorite;
-//            }
-//        }
-//        return null;
-//    }
+    public void insertFav() throws RepositoryException {
+        view.hideEmptyStationLbl();
+        view.hideEmptyFavLbl();
+        if (view.isFavTextEmpty()) {
+            view.showEmptyFavLbl();
+        } else if (view.selectedStationsIsEmpty()) {
+            view.showEmptyStationLbl();
+        } else {
+            String fav = view.getFavTextField();
+            String origin = view.getOrigin();
+            String destination = view.getDestination();
+            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
+            model.insertFavorite(dto);
+
+        }
+    }
+
+    public void deleteFavorite() throws RepositoryException {
+        FavoriteDto dto = view.getSelectedFav();
+        if (dto != null) {
+            model.deleteFavorite(dto.getKey());
+        }
+    }
+
+    public void updateFavorite() throws RepositoryException {
+        FavoriteDto selectFav = view.getSelectedFav();
+        if (view.isFavTextEmpty()) {
+            view.showEmptyFavLbl();
+        } else if (view.selectedStationsIsEmpty()) {
+            view.showEmptyStationLbl();
+        } else {
+            String fav = view.getFavTextField();
+            String origin = view.getOrigin();
+            String destination = view.getDestination();
+            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
+            if (selectFav != null) {
+                dto.setKey(selectFav.getKey());
+                model.updateFavorite(selectFav, dto);
+            }
+        }
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -102,6 +97,21 @@ public class Presenter implements PropertyChangeListener {
             view.addIteneraryData((List<StationData>) evt.getNewValue());
             view.setLblStatusText("Recherche terminée");
             view.setLblNbStationText("Nombre de stations : " + view.getNbStation());
+        }
+        if (evt.getPropertyName().equals(Facade.INSERT_FAV)) {
+            this.view.addFavToTable((FavoriteDto) evt.getNewValue());
+        }
+        if (evt.getPropertyName().equals(Facade.DELETE_FAV)) {
+            for (FavoriteDto favorite : this.view.getAllFavorites()) {
+                if (favorite.equals(evt.getNewValue())) {
+                    this.view.removeFavFromTable(favorite);
+                    break;
+                }
+            }
+        }
+        if (evt.getPropertyName().equals(Facade.UPDATE_FAV)) {
+            this.view.removeFavFromTable((FavoriteDto) evt.getOldValue());
+            this.view.addFavToTable((FavoriteDto) evt.getNewValue());
         }
     }
 

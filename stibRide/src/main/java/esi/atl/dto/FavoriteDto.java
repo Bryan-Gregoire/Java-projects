@@ -52,4 +52,9 @@ public class FavoriteDto extends Dto<Integer> {
         this.destination = destination;
     }
 
+    @Override
+    public String toString() {
+        return "FavoriteDto{" + "key=" + getKey() + "name=" + name + ", origin=" + origin + ", destination=" + destination + '}';
+    }
+
 }
