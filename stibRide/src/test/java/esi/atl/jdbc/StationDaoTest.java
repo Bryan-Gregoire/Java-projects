@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class StibDaoTest {
+public class StationDaoTest {
 
     private final StationDto simonis;
     private final StationDto schweitzer;
@@ -28,9 +28,9 @@ public class StibDaoTest {
 
     private final List<StationDto> all;
 
-    private StibDao instance;
+    private StationDao instance;
 
-    public StibDaoTest() {
+    public StationDaoTest() {
         simonis = new StationDto(KEY, "SIMONIS");
         schweitzer = new StationDto(99_999, "SCHWEITZER");
 
@@ -42,7 +42,7 @@ public class StibDaoTest {
                 new StationDto(8774, "BELGICA"));
         try {
             ConfigManager.getInstance().load();
-            instance = StibDao.getInstance();
+            instance = StationDao.getInstance();
         } catch (RepositoryException | IOException ex) {
             org.junit.jupiter.api.Assertions.fail("Erreur de connection à la"
                     + " base de données de test", ex);
@@ -50,7 +50,7 @@ public class StibDaoTest {
     }
 
     /**
-     * Test of selectAll method, of class StibDao.
+     * Test of selectAll method, of class StationDao.
      *
      * @throws java.lang.Exception
      */
@@ -62,7 +62,7 @@ public class StibDaoTest {
     }
 
     /**
-     * Test of select method, of class StibDao.
+     * Test of select method, of class StationDao.
      *
      * @throws java.lang.Exception
      */
@@ -74,7 +74,7 @@ public class StibDaoTest {
     }
 
     /**
-     * Test of select method, of class StibDao.
+     * Test of select method, of class StationDao.
      *
      * @throws java.lang.Exception
      */
@@ -86,7 +86,7 @@ public class StibDaoTest {
     }
 
     /**
-     * Test of select method, of class StibDao.
+     * Test of select method, of class StationDao.
      *
      * @throws java.lang.Exception
      */

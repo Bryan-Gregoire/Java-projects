@@ -2,7 +2,7 @@ package esi.atl.repository;
 
 import esi.atl.dto.StationDto;
 import esi.atl.exception.RepositoryException;
-import esi.atl.jdbc.StibDao;
+import esi.atl.jdbc.StationDao;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class StationRepositoryTest {
 
     @Mock
-    private StibDao mock;
+    private StationDao mock;
 
     private static final int KEY = 8764;
 

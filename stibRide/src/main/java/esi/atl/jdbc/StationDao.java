@@ -16,16 +16,16 @@ import java.util.List;
  *
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
-public class StibDao implements Dao<Integer, StationDto> {
+public class StationDao implements Dao<Integer, StationDto> {
 
-    private Connection connexion;
+    private final Connection connexion;
 
-    private StibDao() throws RepositoryException {
+    private StationDao() throws RepositoryException {
         connexion = DBManager.getInstance().getConnection();
     }
 
-    public static StibDao getInstance() throws RepositoryException {
-        return StibDaoHolder.getInstance();
+    public static StationDao getInstance() throws RepositoryException {
+        return StationDaoHolder.getInstance();
     }
 
     @Override
@@ -94,10 +94,25 @@ public class StibDao implements Dao<Integer, StationDto> {
         return dtos;
     }
 
-    private static class StibDaoHolder {
+    @Override
+    public Integer insert(StationDto dto) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-        private static StibDao getInstance() throws RepositoryException {
-            return new StibDao();
+    @Override
+    public void update(StationDto dto) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void delete(Integer key) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private static class StationDaoHolder {
+
+        private static StationDao getInstance() throws RepositoryException {
+            return new StationDao();
         }
     }
 

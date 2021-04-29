@@ -76,7 +76,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
         return dto;
     }
 
-    public void insert(FavoriteDto dto) throws RepositoryException {
+    @Override
+    public String insert(FavoriteDto dto) throws RepositoryException {
         if (dto == null) {
             throw new RepositoryException("Parameter is invalid");
         }
@@ -98,6 +99,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
             throw new RepositoryException(e);
         }
         //return id;
+
+        return null; //TODO
     }
 
     public void update(FavoriteDto dto) throws RepositoryException {
@@ -116,8 +119,10 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
+        //TODO
     }
 
+    @Override
     public void delete(String key) throws RepositoryException {
         if (key == null) {
             throw new RepositoryException("Parameter is null");
@@ -131,6 +136,7 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
+        // TODO
     }
 
     private static class FavoriteDaoHolder {

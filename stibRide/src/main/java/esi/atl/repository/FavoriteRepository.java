@@ -32,15 +32,19 @@ public class FavoriteRepository implements Repository<String, FavoriteDto> {
         return dto;
     }
 
-    public void add(FavoriteDto dto) throws RepositoryException {
+    @Override
+    public String add(FavoriteDto dto) throws RepositoryException {
         String key = dto.getKey();
         if (contains(key)) {
             dao.update(dto);
         } else {
             dao.insert(dto);
         }
+
+        return null; // TODO
     }
 
+    @Override
     public void remove(String key) throws RepositoryException {
         dao.delete(key);
     }
@@ -49,6 +53,7 @@ public class FavoriteRepository implements Repository<String, FavoriteDto> {
         dao.update(dto);
     }
 
+    @Override
     public boolean contains(String key) throws RepositoryException {
         FavoriteDto dto = dao.select(key);
         return dto != null;

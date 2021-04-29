@@ -30,4 +30,32 @@ public interface Dao<K, T extends Dto<K>> {
      * @throws RepositoryException if the resource can't be accessed.
      */
     T select(K key) throws RepositoryException;
+
+    /**
+     * Inserts an element into the resource.
+     *
+     * @param dto the element to insert.
+     * @return the element's key, usefull when the key is auto-generated.
+     * @throws RepositoryException if the resource can't be accessed.
+     */
+    K insert(T dto) throws RepositoryException;
+
+    /**
+     * Update an element of the resource.The search of the element is based on
+     * its key.
+     *
+     * @param dto element to update.
+     * @return the element's key, usefull when the key is auto-generated.
+     * @throws RepositoryException if the resource can't be accessed.
+     */
+    void update(T dto) throws RepositoryException;
+
+    /**
+     * Deletes the item of the specific key from the resource.
+     *
+     * @param key key of the element to delete.
+     * @return the element's key, usefull when the key is auto-generated.
+     * @throws RepositoryException if the resource can't be accessed.
+     */
+    void delete(K key) throws RepositoryException;
 }

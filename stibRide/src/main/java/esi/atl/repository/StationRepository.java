@@ -3,7 +3,7 @@ package esi.atl.repository;
 import esi.atl.dto.StationDto;
 import esi.atl.dto.StopDto;
 import esi.atl.exception.RepositoryException;
-import esi.atl.jdbc.StibDao;
+import esi.atl.jdbc.StationDao;
 import java.util.List;
 
 /**
@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class StationRepository implements Repository<Integer, StationDto> {
 
-    private final StibDao dao;
+    private final StationDao dao;
 
     public StationRepository() throws RepositoryException {
-        dao = StibDao.getInstance();
+        dao = StationDao.getInstance();
     }
 
-    StationRepository(StibDao dao) {
+    StationRepository(StationDao dao) {
         this.dao = dao;
     }
 
@@ -35,5 +35,20 @@ public class StationRepository implements Repository<Integer, StationDto> {
 
     public List<StopDto> getAllStops() throws RepositoryException {
         return dao.getFullStop();
+    }
+
+    @Override
+    public Integer add(StationDto item) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void remove(Integer key) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean contains(Integer key) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
