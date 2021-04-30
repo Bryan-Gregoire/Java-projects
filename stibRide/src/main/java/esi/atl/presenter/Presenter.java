@@ -69,12 +69,13 @@ public class Presenter implements PropertyChangeListener {
     public void deleteFavorite() throws RepositoryException {
         FavoriteDto dto = view.getSelectedFav();
         if (dto != null) {
-            model.deleteFavorite(dto.getKey());
+            model.deleteFavorite(dto);
         }
     }
 
     public void updateFavorite() throws RepositoryException {
         FavoriteDto selectFav = view.getSelectedFav();
+        
         if (view.isFavTextEmpty()) {
             view.showEmptyFavLbl();
         } else if (view.selectedStationsIsEmpty()) {
@@ -102,12 +103,7 @@ public class Presenter implements PropertyChangeListener {
             this.view.addFavToTable((FavoriteDto) evt.getNewValue());
         }
         if (evt.getPropertyName().equals(Facade.DELETE_FAV)) {
-            for (FavoriteDto favorite : this.view.getAllFavorites()) {
-                if (favorite.equals(evt.getNewValue())) {
-                    this.view.removeFavFromTable(favorite);
-                    break;
-                }
-            }
+            this.view.removeFavFromTable((FavoriteDto) evt.getNewValue());
         }
         if (evt.getPropertyName().equals(Facade.UPDATE_FAV)) {
             this.view.removeFavFromTable((FavoriteDto) evt.getOldValue());

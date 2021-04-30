@@ -54,13 +54,14 @@ public class Facade implements Model {
     }
 
     @Override
-    public void deleteFavorite(Integer key) throws RepositoryException {
-        favRepo.remove(key);
-        pcs.firePropertyChange(DELETE_FAV, null, key);
+    public void deleteFavorite(FavoriteDto dto) throws RepositoryException {
+        favRepo.remove(dto.getKey());
+        pcs.firePropertyChange(DELETE_FAV, null, dto);
     }
 
     @Override
-    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto) throws RepositoryException {
+    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto) 
+            throws RepositoryException {
         favRepo.update(newDto);
         pcs.firePropertyChange(UPDATE_FAV, oldDto, newDto);
     }

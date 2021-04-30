@@ -19,7 +19,7 @@ public interface Model {
 
     public void insertFavorite(FavoriteDto dto) throws RepositoryException;
 
-    public void deleteFavorite(Integer key) throws RepositoryException;
+    public void deleteFavorite(FavoriteDto dto) throws RepositoryException;
 
     public void updateFavorite(FavoriteDto oldDton, FavoriteDto newDto) throws RepositoryException;
 

@@ -168,6 +168,10 @@ public class View {
         return this.favText.getText();
     }
 
+    public void setFavText(String text) {
+        this.favText.setText(text);
+    }
+
     public FavoriteDto getSelectedFav() {
         return (FavoriteDto) this.favTable.getSelectionModel()
                 .getSelectedItem();
