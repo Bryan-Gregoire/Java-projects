@@ -32,7 +32,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem fx:id="about" mnemonicParsing="false" text="About" />
                     </items>
                 </Menu>
             </menus>
@@ -84,7 +84,7 @@
             <Button fx:id="update" layoutX="528.0" layoutY="299.0" mnemonicParsing="false" text="Update" />
             <Button fx:id="delete" layoutX="599.0" layoutY="299.0" mnemonicParsing="false" text="Delete" />
             <Label fx:id="emptyStation" layoutX="46.0" layoutY="329.0" prefHeight="17.0" prefWidth="228.0" text="Entrer une station origine et destination !" textFill="#ff0202" visible="false" />
-            <Label fx:id="emptyFavText" layoutX="295.0" layoutY="336.0" text="Quel est le nom de votre favoris ?" textFill="RED" visible="false" />
+            <Label fx:id="favSolutions" layoutX="295.0" layoutY="336.0" prefHeight="17.0" prefWidth="220.0" text="Quel est le nom de votre favoris ?" textFill="RED" visible="false" />
             </children>
         </AnchorPane>
         <AnchorPane prefHeight="61.0" prefWidth="1333.0">

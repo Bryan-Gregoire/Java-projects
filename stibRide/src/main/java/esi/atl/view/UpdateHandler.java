@@ -1,5 +1,6 @@
 package esi.atl.view;
 
+import esi.atl.exception.RepositoryException;
 import esi.atl.presenter.Presenter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,10 +19,10 @@ public class UpdateHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent t) {
-//        try {
-//            presenter.updateFav();
-//        } catch (RepositoryException ex) {
-//            System.out.println("Repository error " + ex.getMessage());
-//        }
+        try {
+            presenter.updateFavorite();
+        } catch (RepositoryException ex) {
+            System.out.println("Repository error " + ex.getMessage());
+        }
     }
 }

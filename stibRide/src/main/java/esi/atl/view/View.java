@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -28,6 +29,9 @@ public class View {
 
     @FXML
     private MenuItem quitItem;
+
+    @FXML
+    private MenuItem about;
 
     @FXML
     private Label lblStatus;
@@ -81,23 +85,46 @@ public class View {
     private Label emptyStation;
 
     @FXML
-    private Label emptyFavText;
+    private Label favSolutions;
 
     private ObservableList<StationData> itineraryDatas;
     private ObservableList<FavoriteDto> favoritesDatas;
 
+    Alert aboutAlert;
+
     public void initialize() {
-        initMenu();
+        initQuitAction();
+        initAlertAbout();
+        initAboutAction();
         initStationTableView();
         initFavoriteTableView();
     }
 
-    public void initMenu() {
+    public void initQuitAction() {
         quitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         quitItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 System.exit(0);
+            }
+        });
+    }
+
+    public void initAlertAbout() {
+        aboutAlert = new Alert(Alert.AlertType.INFORMATION);
+        aboutAlert.setTitle("Stib");
+        aboutAlert.setHeaderText("Search the fastest route");
+
+        aboutAlert.setContentText("To search a route between two stations, "
+                + "select a home and destination station and press the search"
+                + " button.");
+    }
+
+    public void initAboutAction() {
+        about.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                aboutAlert.show();
             }
         });
     }
@@ -111,7 +138,7 @@ public class View {
     }
 
     public void initFavoriteTableView() {
-        favCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        favCol.setCellValueFactory(new PropertyValueFactory<>("key"));
         originCol.setCellValueFactory(new PropertyValueFactory<>("origin"));
         destCol.setCellValueFactory(new PropertyValueFactory<>("destination"));
 
@@ -164,6 +191,11 @@ public class View {
         destination.setValue(dtos.get(dtos.size() - 1));
     }
 
+    public void addSearchHandler(Presenter presenter) {
+        SearchHandler handler = new SearchHandler(presenter);
+        search.setOnAction(handler);
+    }
+
     public String getFavTextField() {
         return this.favText.getText();
     }
@@ -181,33 +213,12 @@ public class View {
         return this.favText.getText().isEmpty();
     }
 
-    public void hideEmptyFavLbl() {
-        this.emptyFavText.setVisible(false);
+    public void hideFavSolution() {
+        this.favSolutions.setVisible(false);
     }
 
-    public void showEmptyFavLbl() {
-        this.emptyFavText.setVisible(true);
-    }
-
-    public void addSearchHandler(Presenter presenter) {
-        SearchHandler handler = new SearchHandler(presenter);
-        search.setOnAction(handler);
-    }
-
-    public void addInsertHandler(Presenter presenter) {
-        InsertHandler handler = new InsertHandler(presenter);
-        add.setOnAction(handler);
-        update.setOnAction(handler);
-    }
-
-    public void addUpdateHandler(Presenter presenter) {
-        UpdateHandler handler = new UpdateHandler(presenter);
-        update.setOnAction(handler);
-    }
-
-    public void addDeleteHandler(Presenter presenter) {
-        DeleteHandler handler = new DeleteHandler(presenter);
-        delete.setOnAction(handler);
+    public void showFavSolution() {
+        this.favSolutions.setVisible(true);
     }
 
     public ObservableList<FavoriteDto> getAllFavorites() {
@@ -226,4 +237,18 @@ public class View {
         this.favoritesDatas.remove(dto);
     }
 
+    public void addInsertHandler(Presenter presenter) {
+        InsertHandler handler = new InsertHandler(presenter);
+        add.setOnAction(handler);
+    }
+
+    public void addUpdateHandler(Presenter presenter) {
+        UpdateHandler handler = new UpdateHandler(presenter);
+        update.setOnAction(handler);
+    }
+
+    public void addDeleteHandler(Presenter presenter) {
+        DeleteHandler handler = new DeleteHandler(presenter);
+        delete.setOnAction(handler);
+    }
 }

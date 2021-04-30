@@ -45,7 +45,7 @@ public interface Repository<K, T extends Dto<K>> {
      * @throws RepositoryException if the repository can't access to the
      * element.
      */
-    K add(T item) throws RepositoryException;
+    void add(T item) throws RepositoryException;
 
     /**
      * Removes the element of the specific key.

@@ -48,8 +48,7 @@ public class Facade implements Model {
 
     @Override
     public void insertFavorite(FavoriteDto dto) throws RepositoryException {
-        int key = favRepo.add(dto);
-        dto.setKey(key);
+        favRepo.add(dto);
         pcs.firePropertyChange(INSERT_FAV, null, dto);
     }
 
@@ -60,9 +59,9 @@ public class Facade implements Model {
     }
 
     @Override
-    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto) 
+    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto)
             throws RepositoryException {
-        favRepo.update(newDto);
+        favRepo.update(newDto, oldDto.getKey());
         pcs.firePropertyChange(UPDATE_FAV, oldDto, newDto);
     }
 

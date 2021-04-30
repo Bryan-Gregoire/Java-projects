@@ -51,18 +51,17 @@ public class Presenter implements PropertyChangeListener {
 
     public void insertFav() throws RepositoryException {
         view.hideEmptyStationLbl();
-        view.hideEmptyFavLbl();
-        if (view.isFavTextEmpty()) {
-            view.showEmptyFavLbl();
-        } else if (view.selectedStationsIsEmpty()) {
+        view.hideFavSolution();
+        if (view.selectedStationsIsEmpty()) {
             view.showEmptyStationLbl();
+        } else if (view.isFavTextEmpty()) {
+            view.showFavSolution();
         } else {
             String fav = view.getFavTextField();
             String origin = view.getOrigin();
             String destination = view.getDestination();
             FavoriteDto dto = new FavoriteDto(fav, origin, destination);
             model.insertFavorite(dto);
-
         }
     }
 
@@ -75,19 +74,19 @@ public class Presenter implements PropertyChangeListener {
 
     public void updateFavorite() throws RepositoryException {
         FavoriteDto selectFav = view.getSelectedFav();
-        
+
         if (view.isFavTextEmpty()) {
-            view.showEmptyFavLbl();
+            view.showFavSolution();
         } else if (view.selectedStationsIsEmpty()) {
             view.showEmptyStationLbl();
         } else {
             String fav = view.getFavTextField();
             String origin = view.getOrigin();
             String destination = view.getDestination();
-            FavoriteDto dto = new FavoriteDto(fav, origin, destination);
+            FavoriteDto newDto = new FavoriteDto(fav, origin, destination);
             if (selectFav != null) {
-                dto.setKey(selectFav.getKey());
-                model.updateFavorite(selectFav, dto);
+                System.out.println("Je vais bien faire l'update");
+                model.updateFavorite(selectFav, newDto);
             }
         }
     }

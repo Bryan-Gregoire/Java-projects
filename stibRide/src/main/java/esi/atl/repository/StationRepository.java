@@ -38,7 +38,7 @@ public class StationRepository implements Repository<Integer, StationDto> {
     }
 
     @Override
-    public Integer add(StationDto item) throws RepositoryException {
+    public void add(StationDto item) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

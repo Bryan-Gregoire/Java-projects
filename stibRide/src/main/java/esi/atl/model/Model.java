@@ -21,6 +21,6 @@ public interface Model {
 
     public void deleteFavorite(FavoriteDto dto) throws RepositoryException;
 
-    public void updateFavorite(FavoriteDto oldDton, FavoriteDto newDto) throws RepositoryException;
+    public void updateFavorite(FavoriteDto oldDto, FavoriteDto newDto) throws RepositoryException;
 
 }

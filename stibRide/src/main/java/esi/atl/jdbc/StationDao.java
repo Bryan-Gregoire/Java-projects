@@ -95,12 +95,12 @@ public class StationDao implements Dao<Integer, StationDto> {
     }
 
     @Override
-    public Integer insert(StationDto dto) throws RepositoryException {
+    public void insert(StationDto dto) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void update(StationDto dto) throws RepositoryException {
+    public void update(StationDto dto, Integer key) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
