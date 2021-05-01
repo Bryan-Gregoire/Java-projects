@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class StationData {
 
-    private String name;
-    private List lines;
+    private final String name;
+    private final List lines;
 
     public StationData(String name, List lines) {
         this.name = name;

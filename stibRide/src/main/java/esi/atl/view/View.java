@@ -146,6 +146,16 @@ public class View {
 
         favoritesDatas = FXCollections.observableArrayList();
         favTable.setItems(favoritesDatas);
+
+        favTable.setOnMouseClicked((t) -> {
+            try {
+                FavoriteDto dto = (FavoriteDto) this.favTable.getSelectionModel()
+                        .getSelectedItem();
+                favText.setText(dto.getKey());
+            } catch (Exception e) {
+            }
+        });
+
     }
 
     public String getOrigin() {

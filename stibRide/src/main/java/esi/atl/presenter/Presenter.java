@@ -10,7 +10,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Objects;
-import org.sqlite.SQLiteException;
 
 /**
  *
@@ -104,7 +103,8 @@ public class Presenter implements PropertyChangeListener {
         if (evt.getPropertyName().equals(Facade.SHORT_PATH)) {
             view.addIteneraryData((List<StationData>) evt.getNewValue());
             view.setLblStatusText("Recherche terminée");
-            view.setLblNbStationText("Nombre de stations : " + view.getNbStation());
+            view.setLblNbStationText("Nombre de stations : " 
+                    + view.getNbStation());
         }
         if (evt.getPropertyName().equals(Facade.INSERT_FAV)) {
             this.view.addFavToTable((FavoriteDto) evt.getNewValue());

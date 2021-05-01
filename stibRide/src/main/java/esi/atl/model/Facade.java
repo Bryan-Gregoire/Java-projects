@@ -117,7 +117,8 @@ public class Facade implements Model {
     }
 
     @Override
-    public void calculateItinerary(String nameOrigin, String nameDest) throws RepositoryException {
+    public void calculateItinerary(String nameOrigin, String nameDest) 
+            throws RepositoryException {
         Graph graph = new Graph();
         fillGraph(graph, stations);
         Node source = getNode(graph, nameOrigin);

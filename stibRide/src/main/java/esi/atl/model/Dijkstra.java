@@ -11,7 +11,8 @@ import java.util.Set;
  */
 public class Dijkstra {
 
-    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
+    public static Graph calculateShortestPathFromSource(Graph graph,
+            Node source) {
         source.setDistance(0);
 
         Set<Node> settledNodes = new HashSet<>();
@@ -27,7 +28,8 @@ public class Dijkstra {
                 Node adjacentNode = adjacencyPair.getKey();
                 Integer edgeWeight = adjacencyPair.getValue();
                 if (!settledNodes.contains(adjacentNode)) {
-                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
+                    calculateMinimumDistance(adjacentNode, edgeWeight,
+                            currentNode);
                     unsettledNodes.add(adjacentNode);
                 }
             }
@@ -54,7 +56,8 @@ public class Dijkstra {
         Integer sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeigh);
-            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
+            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode
+                    .getShortestPath());
             shortestPath.add(sourceNode);
             evaluationNode.setShortestPath(shortestPath);
         }

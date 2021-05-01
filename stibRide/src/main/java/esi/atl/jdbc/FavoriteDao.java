@@ -81,7 +81,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
         if (dto == null) {
             throw new RepositoryException("Parameter is invalid");
         }
-        String sql = "INSERT INTO FAVORIS(name,origin,destination) VALUES(?,?,?)";
+        String sql = "INSERT INTO FAVORIS(name,origin,destination) "
+                + "VALUES(?,?,?)";
 
         try ( PreparedStatement psmt = connexion.prepareStatement(sql)) {
             psmt.setString(1, dto.getKey());
@@ -95,7 +96,8 @@ public class FavoriteDao implements Dao<String, FavoriteDto> {
     }
 
     @Override
-    public void update(FavoriteDto newDto, String oldKey) throws RepositoryException {
+    public void update(FavoriteDto newDto, String oldKey)
+            throws RepositoryException {
         if (newDto == null || oldKey == null) {
             throw new RepositoryException("Parameter is null");
         }
