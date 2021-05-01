@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Objects;
+import org.sqlite.SQLiteException;
 
 /**
  *
@@ -61,7 +62,11 @@ public class Presenter implements PropertyChangeListener {
             String origin = view.getOrigin();
             String destination = view.getDestination();
             FavoriteDto dto = new FavoriteDto(fav, origin, destination);
-            model.insertFavorite(dto);
+            try {
+                model.insertFavorite(dto);
+            } catch (RepositoryException e) {
+                view.showFavNameAlert();
+            }
         }
     }
 
@@ -85,8 +90,11 @@ public class Presenter implements PropertyChangeListener {
             String destination = view.getDestination();
             FavoriteDto newDto = new FavoriteDto(fav, origin, destination);
             if (selectFav != null) {
-                System.out.println("Je vais bien faire l'update");
-                model.updateFavorite(selectFav, newDto);
+                try {
+                    model.updateFavorite(selectFav, newDto);
+                } catch (Exception e) {
+                    view.showFavNameAlert();
+                }
             }
         }
     }

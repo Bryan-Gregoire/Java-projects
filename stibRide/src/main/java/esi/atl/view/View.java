@@ -91,11 +91,13 @@ public class View {
     private ObservableList<FavoriteDto> favoritesDatas;
 
     Alert aboutAlert;
+    Alert favNameExist;
 
     public void initialize() {
         initQuitAction();
         initAlertAbout();
         initAboutAction();
+        initAlertFavNameExist();
         initStationTableView();
         initFavoriteTableView();
     }
@@ -250,5 +252,18 @@ public class View {
     public void addDeleteHandler(Presenter presenter) {
         DeleteHandler handler = new DeleteHandler(presenter);
         delete.setOnAction(handler);
+    }
+
+    public void initAlertFavNameExist() {
+        favNameExist = new Alert(Alert.AlertType.ERROR);
+        favNameExist.setTitle("Favorites");
+        favNameExist.setHeaderText("Favorite already exists");
+
+        favNameExist.setContentText("The name you entered already exists, "
+                + "please try with a new name.");
+    }
+
+    public void showFavNameAlert() {
+        favNameExist.show();
     }
 }
