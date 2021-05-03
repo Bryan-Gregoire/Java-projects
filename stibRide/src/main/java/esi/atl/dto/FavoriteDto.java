@@ -17,12 +17,6 @@ public class FavoriteDto extends Dto<String> {
         this.destination = destination;
     }
 
-    public FavoriteDto(String origin, String destination) {
-        super(null);
-        this.origin = origin;
-        this.destination = destination;
-    }
-
     public String getOrigin() {
         return origin;
     }
@@ -57,7 +51,7 @@ public class FavoriteDto extends Dto<String> {
         if (!Objects.equals(this.destination, other.destination)) {
             return false;
         }
-        return true;
+        return super.equals(obj);
     }
 
 }

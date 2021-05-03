@@ -86,12 +86,12 @@ public class Presenter implements PropertyChangeListener {
     }
 
     public void updateFavorite() throws RepositoryException {
-        FavoriteDto selectFav = view.getSelectedFav();
         if (view.isFavTextEmpty()) {
             view.showFavSolution();
         } else if (view.selectedStationsIsEmpty()) {
             view.showEmptyStationLbl();
         } else {
+            FavoriteDto selectFav = view.getSelectedFav();
             String fav = view.getFavTextField();
             String origin = view.getOrigin();
             String destination = view.getDestination();
