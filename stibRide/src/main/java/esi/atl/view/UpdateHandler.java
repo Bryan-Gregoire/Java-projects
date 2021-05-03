@@ -22,7 +22,7 @@ public class UpdateHandler implements EventHandler<ActionEvent> {
         try {
             presenter.updateFavorite();
         } catch (RepositoryException ex) {
-            System.out.println("Repository error " + ex.getMessage());
+            System.out.println("(Update) Repository error " + ex.getMessage());
         }
     }
 }

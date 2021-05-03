@@ -22,7 +22,7 @@ public class StationDto extends Dto<Integer> {
         return name;
     }
 
-    public List<StopDto> getStops() { // bof.
+    public List<StopDto> getStops() {
         return stops;
     }
 

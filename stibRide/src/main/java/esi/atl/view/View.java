@@ -146,16 +146,11 @@ public class View {
 
         favoritesDatas = FXCollections.observableArrayList();
         favTable.setItems(favoritesDatas);
+    }
 
-        favTable.setOnMouseClicked((t) -> {
-            try {
-                FavoriteDto dto = (FavoriteDto) this.favTable.getSelectionModel()
-                        .getSelectedItem();
-                favText.setText(dto.getKey());
-            } catch (Exception e) {
-            }
-        });
-
+    public void addFavTableMouseClicked(Presenter presenter) {
+        MouseClickedHandler handle = new MouseClickedHandler(presenter);
+        favTable.setOnMouseClicked(handle);
     }
 
     public String getOrigin() {
@@ -273,7 +268,7 @@ public class View {
                 + "please try with a new name.");
     }
 
-    public void showFavNameAlert() {
+    public void showFavNameExistAlert() {
         favNameExist.show();
     }
 }

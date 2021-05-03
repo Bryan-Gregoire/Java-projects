@@ -22,8 +22,7 @@ public class DeleteHandler implements EventHandler<ActionEvent> {
         try {
             presenter.deleteFavorite();
         } catch (RepositoryException ex) {
-            System.out.println("Repository error " + ex.getMessage());
+            System.out.println("(Delete) Repository error " + ex.getMessage());
         }
     }
-
 }

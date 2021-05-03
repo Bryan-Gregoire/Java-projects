@@ -22,7 +22,7 @@ public class InsertHandler implements EventHandler<ActionEvent> {
         try {
             presenter.insertFav();
         } catch (RepositoryException ex) {
-            System.out.println("Repository error " + ex.getMessage());
+            System.out.println("(Insert) Repository error " + ex.getMessage());
         }
     }
 }

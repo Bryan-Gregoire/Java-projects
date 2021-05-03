@@ -36,6 +36,15 @@ public class Presenter implements PropertyChangeListener {
         view.addInsertHandler(this);
         view.addDeleteHandler(this);
         view.addUpdateHandler(this);
+        view.addFavTableMouseClicked(this);
+    }
+
+    public void setSelectedFavToFavField() {
+        try {
+            FavoriteDto dto = view.getSelectedFav();
+            view.setFavText(dto.getKey());
+        } catch (Exception e) {
+        }
     }
 
     public void getItinerary() throws RepositoryException {
@@ -64,7 +73,7 @@ public class Presenter implements PropertyChangeListener {
             try {
                 model.insertFavorite(dto);
             } catch (RepositoryException e) {
-                view.showFavNameAlert();
+                view.showFavNameExistAlert();
             }
         }
     }
@@ -78,7 +87,6 @@ public class Presenter implements PropertyChangeListener {
 
     public void updateFavorite() throws RepositoryException {
         FavoriteDto selectFav = view.getSelectedFav();
-
         if (view.isFavTextEmpty()) {
             view.showFavSolution();
         } else if (view.selectedStationsIsEmpty()) {
@@ -92,7 +100,7 @@ public class Presenter implements PropertyChangeListener {
                 try {
                     model.updateFavorite(selectFav, newDto);
                 } catch (Exception e) {
-                    view.showFavNameAlert();
+                    view.showFavNameExistAlert();
                 }
             }
         }
@@ -103,7 +111,7 @@ public class Presenter implements PropertyChangeListener {
         if (evt.getPropertyName().equals(Facade.SHORT_PATH)) {
             view.addIteneraryData((List<StationData>) evt.getNewValue());
             view.setLblStatusText("Recherche terminée");
-            view.setLblNbStationText("Nombre de stations : " 
+            view.setLblNbStationText("Nombre de stations : "
                     + view.getNbStation());
         }
         if (evt.getPropertyName().equals(Facade.INSERT_FAV)) {
