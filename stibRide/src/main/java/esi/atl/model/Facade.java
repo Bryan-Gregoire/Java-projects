@@ -36,6 +36,12 @@ public class Facade implements Model {
         getFullStation();
     }
 
+    /**
+     * Get a list of the name of all the stations.
+     *
+     * @return list of name of stations.
+     * @throws RepositoryException
+     */
     @Override
     public List getAllStationsName() throws RepositoryException {
         List nameStation = new ArrayList();
@@ -71,6 +77,11 @@ public class Facade implements Model {
         return favorites;
     }
 
+    /**
+     * Fill all the stations with all their stops.
+     *
+     * @throws RepositoryException
+     */
     private void getFullStation() throws RepositoryException {
         stations = stationRepo.getAll();
         List<StopDto> stops = stationRepo.getAllStops();
@@ -86,6 +97,13 @@ public class Facade implements Model {
         }
     }
 
+    /**
+     * Add my destination to my shortest path. Saves all the data i need of my
+     * path to send it to my listeners.
+     *
+     * @param path the shortest path.
+     * @param destination the destination of the path.
+     */
     private void getStibDatas(List<Node> path, Node destination) {
         List<StationData> datas = new ArrayList<>();
         path.add(destination);
@@ -116,8 +134,15 @@ public class Facade implements Model {
         return null;
     }
 
+    /**
+     * Calculate the shortest path between two given stations.
+     *
+     * @param nameOrigin name of the departure station.
+     * @param nameDest name of the destination station.
+     * @throws RepositoryException
+     */
     @Override
-    public void calculateItinerary(String nameOrigin, String nameDest) 
+    public void calculateItinerary(String nameOrigin, String nameDest)
             throws RepositoryException {
         Graph graph = new Graph();
         fillGraph(graph, stations);
@@ -127,6 +152,12 @@ public class Facade implements Model {
         getStibDatas(destination.getShortestPath(), destination);
     }
 
+    /**
+     * Fill in the nodes of the graph with the given stations and their stops.
+     *
+     * @param graph the given graph to fill.
+     * @param stations stations to be inserted in the graph.
+     */
     private void fillGraph(Graph graph, List<StationDto> stations) {
         List<Node> nodes = new ArrayList<>();
         for (int i = 0; i < stations.size(); i++) {

@@ -92,6 +92,7 @@ public class View {
 
     Alert aboutAlert;
     Alert favNameExist;
+    Alert notSelectedFavorite;
 
     public void initialize() {
         initQuitAction();
@@ -100,6 +101,7 @@ public class View {
         initAlertFavNameExist();
         initStationTableView();
         initFavoriteTableView();
+        initAlertNotSelectedFavorite();
     }
 
     public void initQuitAction() {
@@ -269,6 +271,19 @@ public class View {
     }
 
     public void showFavNameExistAlert() {
-        favNameExist.show();
+        favNameExist.showAndWait();
+    }
+
+    public void initAlertNotSelectedFavorite() {
+        notSelectedFavorite = new Alert(Alert.AlertType.INFORMATION);
+        notSelectedFavorite.setTitle("Favorites");
+        notSelectedFavorite.setHeaderText("Favorite not selected");
+
+        notSelectedFavorite.setContentText("please select a favourite from the "
+                + "list.");
+    }
+
+    public void showNotSelectedFavoriteAlert() {
+        notSelectedFavorite.showAndWait();
     }
 }

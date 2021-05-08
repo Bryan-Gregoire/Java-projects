@@ -82,10 +82,14 @@ public class Presenter implements PropertyChangeListener {
         FavoriteDto dto = view.getSelectedFav();
         if (dto != null) {
             model.deleteFavorite(dto);
+        } else {
+            view.showNotSelectedFavoriteAlert();
         }
     }
 
     public void updateFavorite() throws RepositoryException {
+        view.hideEmptyStationLbl();
+        view.hideFavSolution();
         if (view.isFavTextEmpty()) {
             view.showFavSolution();
         } else if (view.selectedStationsIsEmpty()) {
@@ -99,9 +103,11 @@ public class Presenter implements PropertyChangeListener {
             if (selectFav != null) {
                 try {
                     model.updateFavorite(selectFav, newDto);
-                } catch (Exception e) {
+                } catch (RepositoryException e) {
                     view.showFavNameExistAlert();
                 }
+            } else {
+                view.showNotSelectedFavoriteAlert();
             }
         }
     }
