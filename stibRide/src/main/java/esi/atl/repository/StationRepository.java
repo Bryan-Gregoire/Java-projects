@@ -46,9 +46,4 @@ public class StationRepository implements Repository<Integer, StationDto> {
     public void remove(Integer key) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public boolean contains(Integer key) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

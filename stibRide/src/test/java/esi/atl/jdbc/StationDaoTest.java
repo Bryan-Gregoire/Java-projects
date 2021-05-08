@@ -7,6 +7,7 @@ package esi.atl.jdbc;
 
 import esi.atl.config.ConfigManager;
 import esi.atl.dto.StationDto;
+import esi.atl.dto.StopDto;
 import esi.atl.exception.RepositoryException;
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +28,7 @@ public class StationDaoTest {
     private static final int KEY = 8764;
 
     private final List<StationDto> all;
+    private final List<StopDto> allStop;
 
     private StationDao instance;
 
@@ -40,6 +42,19 @@ public class StationDaoTest {
                 new StationDto(8432, "ROGIER"),
                 simonis,
                 new StationDto(8774, "BELGICA"));
+
+        allStop = List.of(
+                new StopDto(1, 8032, 8),
+                new StopDto(5, 8032, 17),
+                new StopDto(6, 8422, 22),
+                new StopDto(2, 8422, 15),
+                new StopDto(6, 8432, 23),
+                new StopDto(2, 8432, 16),
+                new StopDto(6, 8764, 8),
+                new StopDto(2, 8764, 1),
+                new StopDto(6, 8774, 7)
+        );
+
         try {
             ConfigManager.getInstance().load();
             instance = StationDao.getInstance();
@@ -47,18 +62,6 @@ public class StationDaoTest {
             org.junit.jupiter.api.Assertions.fail("Erreur de connection à la"
                     + " base de données de test", ex);
         }
-    }
-
-    /**
-     * Test of selectAll method, of class StationDao.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testSelectAll() throws Exception {
-        System.out.println("Test selectAll");
-        List<StationDto> result = instance.selectAll();
-        assertEquals(all, result);
     }
 
     /**
@@ -97,6 +100,29 @@ public class StationDaoTest {
         assertThrows(RepositoryException.class, () -> {
             StationDto result = instance.select(incorrect);
         });
+    }
 
+    /**
+     * Test of selectAll method, of class StationDao.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testSelectAll() throws Exception {
+        System.out.println("Test selectAll");
+        List<StationDto> result = instance.selectAll();
+        assertEquals(all, result);
+    }
+
+    /**
+     * Test of getFullStop method, of class StationDao.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetFullStop() throws Exception {
+        System.out.println("Test getFullStop");
+        List<StopDto> result = instance.getFullStop();
+        assertEquals(allStop, result);
     }
 }

@@ -46,10 +46,4 @@ public class FavoriteRepository implements Repository<String, FavoriteDto> {
         dao.update(newDto, oldKey);
     }
 
-    @Override
-    public boolean contains(String key) throws RepositoryException {
-        FavoriteDto dto = dao.select(key);
-        return dto != null;
-    }
-
 }

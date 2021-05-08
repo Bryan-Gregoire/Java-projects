@@ -28,4 +28,36 @@ public class StopDto {
         return order;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.line;
+        hash = 67 * hash + this.station;
+        hash = 67 * hash + this.order;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final StopDto other = (StopDto) obj;
+        if (this.line != other.line) {
+            return false;
+        }
+        if (this.station != other.station) {
+            return false;
+        }
+        if (this.order != other.order) {
+            return false;
+        }
+        return true;
+    }
 }

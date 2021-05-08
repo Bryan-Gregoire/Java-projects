@@ -54,4 +54,9 @@ public class FavoriteDto extends Dto<String> {
         return super.equals(obj);
     }
 
+    @Override
+    public String toString() {
+        return "FavoriteDto{" + "name : "+ getKey() + " origin=" + origin + ", destination=" + destination + '}';
+    }
+  
 }
