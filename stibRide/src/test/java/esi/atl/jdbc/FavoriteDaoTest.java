@@ -9,10 +9,15 @@ import esi.atl.config.ConfigManager;
 import esi.atl.dto.FavoriteDto;
 import esi.atl.exception.RepositoryException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -20,6 +25,8 @@ import org.junit.jupiter.api.Test;
  * @author Bryan Grégoire <53735@etu.he2b.be>
  */
 public class FavoriteDaoTest {
+
+    private Connection connection;
 
     private static final String KEY = "ecole";
 
@@ -42,22 +49,28 @@ public class FavoriteDaoTest {
         try {
             ConfigManager.getInstance().load();
             instance = FavoriteDao.getInstance();
+            connection = DBManager.getInstance().getConnection();
         } catch (RepositoryException | IOException ex) {
             org.junit.jupiter.api.Assertions.fail("Erreur de connection à la"
                     + " base de données de test", ex);
         }
     }
 
-//    @BeforeEach
-//    void init() throws RepositoryException {
-//        try {
-//            ConfigManager.getInstance().load();
-//            instance = FavoriteDao.getInstance();
-//        } catch (RepositoryException | IOException ex) {
-//            org.junit.jupiter.api.Assertions.fail("Erreur de connection à la"
-//                    + " base de données de test", ex);
-//        }
-//    }
+    @BeforeEach
+    void setUp() throws SQLException {
+        connection.setAutoCommit(false);
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        connection.rollback();
+    }
+
+    @AfterClass
+    void tearDownClass() throws SQLException {
+        connection.close();
+    }
+
     /**
      * Test of selectAll method, of class FavoriteDao.
      */
@@ -100,29 +113,29 @@ public class FavoriteDaoTest {
         });
     }
 
-//    /**
-//     * Test of insert method, of class FavoriteDao.
-//     */
-//    @Test
-//    public void TestInsertExist() throws Exception {
-//        System.out.println(" Test insert exist");
-//
-//        FavoriteDto item = new FavoriteDto("ville", "SCHWEITZER", "ROGIER");
-//
-//        instance.insert(item);
-//
-//        assertEquals(instance.select(item.getKey()),
-//                new FavoriteDto("ville", "SCHWEITZER", "ROGIER"));
-//    }
+    /**
+     * Test of insert method, of class FavoriteDao.
+     */
+    @Test
+    public void TestInsertExist() throws Exception {
+        System.out.println(" Test insert exist");
 
+        FavoriteDto item = new FavoriteDto("ville", "SCHWEITZER", "ROGIER");
+
+        instance.insert(item);
+
+        assertEquals(instance.select(item.getKey()),
+                new FavoriteDto("ville", "SCHWEITZER", "ROGIER"));
+    }
+    
 //    /**
 //     * Test of insert method, of class FavoriteDao.
 //     */
 //    @Test
 //    public void testInsertNotExist() throws Exception {
-        // How test this ?
+    // How test this ?
 //    }
-    
+
     /**
      * Test of insert method, of class FavoriteDao.
      */
@@ -135,20 +148,20 @@ public class FavoriteDaoTest {
         });
     }
 
-//    /**
-//     * Test of update method, of class FavoriteDao.
-//     */
-//    @Test
-//    public void testUpdate() throws Exception {
-//        System.out.println("update");
-//        FavoriteDto newDto = new FavoriteDto("test", "ROGIER", "MADOU");
-//        String oldKey = "ephec";
-//        instance.update(newDto, oldKey);
-//
-//        assertEquals(instance.select(newDto.getKey()),
-//                new FavoriteDto("test", "ROGIER", "MADOU"));
-//    }
+    /**
+     * Test of update method, of class FavoriteDao.
+     */
+    @Test
+    public void testUpdate() throws Exception {
+        System.out.println("update");
+        FavoriteDto newDto = new FavoriteDto("test", "ROGIER", "MADOU");
+        String oldKey = "ephec";
+        instance.update(newDto, oldKey);
 
+        assertEquals(instance.select(newDto.getKey()),
+                new FavoriteDto("test", "ROGIER", "MADOU"));
+    }
+    
     /**
      * Test of update method, of class FavoriteDao.
      */
@@ -184,15 +197,15 @@ public class FavoriteDaoTest {
         });
     }
 
-//    /**
-//     * Test of delete method, of class FavoriteDao.
-//     */
-//    @Test
-//    public void testDelete() throws Exception {
-//        instance.delete("cinema");
-//        assertNull(instance.select("cinema"));
-//    }
-
+    /**
+     * Test of delete method, of class FavoriteDao.
+     */
+    @Test
+    public void testDelete() throws Exception {
+        instance.delete("cinema");
+        assertNull(instance.select("cinema"));
+    }
+    
     /**
      * Test of delete method, of class FavoriteDao.
      */
